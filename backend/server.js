@@ -14,7 +14,6 @@ app.use(cors());
 
 app.use("/Images", express.static("businessImages"));
 app.use("/wda/user", require("./routes/userRoutes"));
-app.use("/wda/home", require("./routes/userRoutes"));
 
 app.listen(port, () => {
   console.log("WDA Server Started", port);
