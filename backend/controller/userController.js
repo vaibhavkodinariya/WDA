@@ -4,6 +4,7 @@ const bcry = require("bcrypt");
 const fs = require("fs");
 const multer = require("multer");
 const storage = require("node-persist");
+const delay = 2 * 60 * 1000;
 const client = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
@@ -57,8 +58,8 @@ const userLogin = asyncHandler(async (req, res) => {
 //@Route /api/user/verify
 //access Private
 const sendOtp = asyncHandler(async (req, res) => {
-  const { name, businesstype, type, contactNo } = req.body;
-  if (!name || !businesstype || !type || !contactNo) {
+  const { name, type, contactNo } = req.body;
+  if (!name || !type || !contactNo) {
     res.send(
       res.json({
         success: false,
@@ -82,15 +83,19 @@ const sendOtp = asyncHandler(async (req, res) => {
       dir: "tempData",
       stringify: JSON.stringify,
       parse: JSON.parse,
-      expiredInterval: 3 * 60 * 1000,
       writeQueue: true,
       writeQueueWriteOnlyLast: true,
+      expiredInterval: 2 * 60 * 1000,
     });
     const mergedData = {
       otp: otp,
       data: req.body,
     };
-    await storage.setItem("userData", mergedData);
+    await storage.setItem(name, mergedData);
+    setTimeout(() => {
+      storage.removeItem(name);
+    }, delay);
+
     client.messages
       .create({
         body:
@@ -112,12 +117,12 @@ const sendOtp = asyncHandler(async (req, res) => {
 });
 
 const verifyOtp = asyncHandler(async (req, res) => {
-  const { otpCode } = req.body;
+  const { otpCode, name } = req.body;
   if (!otpCode) {
     res.send({ success: false, messege: "Send OTP Properly" });
   } else {
     try {
-      const data = await storage.getItem("userData");
+      const data = await storage.getItem(name);
       if (data["otp"] == otpCode) {
         res.send({ success: true, messege: "Otp Verified" });
       } else {
@@ -130,7 +135,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { password, confirmpassword } = req.body;
+  const { name, password, confirmpassword } = req.body;
   if (!password || !confirmpassword) {
     res.send({ success: false, messege: "Please Enter Password Properly" });
   } else {
@@ -142,7 +147,7 @@ const registerUser = asyncHandler(async (req, res) => {
     } else {
       const salt = await bcry.genSalt(10);
       const hashpassword = await bcry.hash(password, salt);
-      const data = await storage.getItem("userData");
+      const data = await storage.getItem(name);
       const userdata = await User.create({
         Name: data["data"]["name"],
         Type: data["data"]["type"],
