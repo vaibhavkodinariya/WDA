@@ -96,11 +96,11 @@ const sendOtp = asyncHandler(async (req, res) => {
       storage.removeItem(name);
     }, delay);
 
-    client.messages
+    await client.messages
       .create({
         body:
           otp +
-          " is your OTP to login to WDA. Do not share with anyone. WDA never calls to ask for OTP. The otp expires in 2 mins.",
+          " is your OTP to login to WDA. Do not share with anyone. WDA never calls to ask for OTP. The OTP expires in 2 mins.",
         to: "+91" + contactNo,
         from: "+16672819468",
       })
