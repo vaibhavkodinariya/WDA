@@ -17,7 +17,6 @@ const imageStorage = multer.diskStorage({
     return cb(null, "./images");
   },
   filename: function (req, file, cb) {
-    //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     return cb(null, file.originalname);
   },
 });
@@ -169,23 +168,26 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 //@desc Add Business Images
-//@Route /api/user/
+//@Route /api/user/addImages
 //access Private
 const addImages = asyncHandler(async (req, res) => {
-  const { imagePath } = req.body;
+  const { businessName, imageID, imagePath } = req.body;
   const imageBuffer = Buffer.from(imagePath, "base64");
 
   let currentDirectory = process.cwd();
 
   currentDirectory = currentDirectory.replace(/\\/g, "/");
 
-  console.log("Current directory path:", currentDirectory);
+  var folderpath = `${currentDirectory}/businessImages/`;
 
-  var folderpath = `${currentDirectory}/businessImages`;
-
-  fs.writeFile(`${folderpath}/vaibhav.jpg`, imageBuffer, (err) => {
+  fs.writeFile(`${folderpath}/${imageID}.jpg`, imageBuffer, (err) => {
     if (err) {
       return res.status(500).send("Error saving image");
+    } else {
+      res.send({
+        id: imageID,
+        url: `http://10.201.251.241:8000/Images/${imageID}.jpg`,
+      });
     }
   });
 });
