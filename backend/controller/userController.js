@@ -1,27 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcry = require("bcrypt");
-const fs = require("fs");
-const multer = require("multer");
 const storage = require("node-persist");
 const delay = 2 * 60 * 1000;
 const client = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 );
-// const path = require("path");
+
 const speakeasy = require("speakeasy");
-
-const imageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    return cb(null, "./images");
-  },
-  filename: function (req, file, cb) {
-    return cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: imageStorage });
 
 //@desc Login user
 //@Route /api/user/login
@@ -30,26 +17,24 @@ const userLogin = asyncHandler(async (req, res) => {
   const { contactNumber, password, type } = req.body;
 
   if (!contactNumber || !password || !type) {
-    res.status(400);
     res.send(
-      res.json({ success: false, messege: "Please fill your Credentails" })
+      res.json({ success: false, message: "Please fill your Credentails" })
     );
   }
   const userdata = await User.findOne({ ContactNo: contactNumber });
   if (userdata && (await bcry.compare(password, userdata.Password))) {
     if (type == "Admin") {
-      res.status(200).json({
-        Success: true,
+      res.send({
+        success: true,
       });
     } else {
-      res.status(200).json({
-        Success: true,
+      res.send({
+        success: true,
         name: userdata,
       });
     }
   } else {
-    res.status(400);
-    res.json({ success: false, messege: "Incorrect Username or Password" });
+    res.send({ success: false, message: "Incorrect Username or Password" });
   }
 });
 
@@ -59,18 +44,16 @@ const userLogin = asyncHandler(async (req, res) => {
 const sendOtp = asyncHandler(async (req, res) => {
   const { name, type, contactNo } = req.body;
   if (!name || !type || !contactNo) {
-    res.send(
-      res.json({
-        success: false,
-        messege: "Please Enter your Number Properly",
-      })
-    );
+    return res.send({
+      success: false,
+      message: "Please Enter your Number Properly",
+    });
   }
 
   const data = await User.findOne({ ContactNo: contactNo });
 
   if (data) {
-    res.send({ success: false, messege: "Already Registered Number" });
+    res.send({ success: false, message: "Already Registered Number" });
   } else {
     const secret = speakeasy.generateSecret({ length: 20 }); // Generate a secret key
     const otp = speakeasy.totp({
@@ -106,11 +89,11 @@ const sendOtp = asyncHandler(async (req, res) => {
       .then(() =>
         res.send({
           success: true,
-          messege: "OTP has been Send To Your Entered Number",
+          message: "OTP has been Send To Your Entered Number",
         })
       )
       .catch((error) => {
-        res.send({ success: false, messege: "Something Went Wrong" });
+        res.send({ success: false, message: "Something Went Wrong" });
       });
   }
 });
@@ -118,17 +101,17 @@ const sendOtp = asyncHandler(async (req, res) => {
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otpCode, name } = req.body;
   if (!otpCode) {
-    res.send({ success: false, messege: "Send OTP Properly" });
+    res.send({ success: false, message: "Send OTP Properly" });
   } else {
     try {
       const data = await storage.getItem(name);
       if (data["otp"] == otpCode) {
-        res.send({ success: true, messege: "Otp Verified" });
+        res.send({ success: true, message: "Otp Verified" });
       } else {
-        res.send({ success: false, messege: "Wrong OTP Please Try Again" });
+        res.send({ success: false, message: "Wrong OTP Please Try Again" });
       }
     } catch (e) {
-      res.send({ success: false, messege: "Otp Expired Resend Again" });
+      res.send({ success: false, message: "Otp Expired Resend Again" });
     }
   }
 });
@@ -136,12 +119,12 @@ const verifyOtp = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, password, confirmpassword } = req.body;
   if (!password || !confirmpassword) {
-    res.send({ success: false, messege: "Please Enter Password Properly" });
+    res.send({ success: false, message: "Please Enter Password Properly" });
   } else {
     if (password != confirmpassword) {
       res.send({
         success: false,
-        messege: "Password and ConfirmPassword Doesn't Match",
+        message: "Password and ConfirmPassword Doesn't Match",
       });
     } else {
       const salt = await bcry.genSalt(10);
@@ -160,36 +143,10 @@ const registerUser = asyncHandler(async (req, res) => {
           })
         );
       } else {
-        res.status(400);
-        throw new Error("Invalid User Data");
+        res.send({ success: false, message: "Invalid User Data" });
       }
     }
   }
 });
 
-//@desc Add Business Images
-//@Route /api/user/addImages
-//access Private
-const addImages = asyncHandler(async (req, res) => {
-  const { businessName, imageID, imagePath } = req.body;
-  const imageBuffer = Buffer.from(imagePath, "base64");
-
-  let currentDirectory = process.cwd();
-
-  currentDirectory = currentDirectory.replace(/\\/g, "/");
-
-  var folderpath = `${currentDirectory}/businessImages/`;
-
-  fs.writeFile(`${folderpath}/${imageID}.jpg`, imageBuffer, (err) => {
-    if (err) {
-      return res.status(500).send("Error saving image");
-    } else {
-      res.send({
-        id: imageID,
-        url: `http://10.201.251.241:8000/Images/${imageID}.jpg`,
-      });
-    }
-  });
-});
-
-module.exports = { userLogin, sendOtp, addImages, verifyOtp, registerUser };
+module.exports = { userLogin, sendOtp, verifyOtp, registerUser };

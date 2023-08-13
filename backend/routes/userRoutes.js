@@ -1,7 +1,6 @@
 const express = require("express");
 const {
   userLogin,
-  addImages,
   sendOtp,
   verifyOtp,
   registerUser,
@@ -13,6 +12,5 @@ router.post("/login", userLogin);
 router.post("/sendOtp", sendOtp);
 router.post("/verifyOtp", verifyOtp);
 router.post("/registerUser", registerUser);
-router.post("/addImages", addImages);
 
 module.exports = router;

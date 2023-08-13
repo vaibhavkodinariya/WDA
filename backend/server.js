@@ -12,8 +12,9 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use("/Images", express.static("businessImages"));
+app.use("/wda/Images", express.static("businessImages"));
 app.use("/wda/user", require("./routes/userRoutes"));
+app.use("/wda/business", require("./routes/businessRoutes"));
 
 app.listen(port, () => {
   console.log("WDA Server Started", port);
