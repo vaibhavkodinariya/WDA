@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcry = require("bcrypt");
+const fs = require("fs");
+const path = require("path");
 const storage = require("node-persist");
 const delay = 2 * 60 * 1000;
 const client = require("twilio")(
@@ -149,4 +151,51 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { userLogin, sendOtp, verifyOtp, registerUser };
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, gender, contactNumber, dob, address, profileImagePath } =
+    req.body;
+
+  const imageBuffer = Buffer.from(profileImagePath, "base64");
+
+  const newPath = path.dirname(__dirname);
+
+  const userName = name.replace(/\s+/g, "");
+
+  const folderpath = path.join(newPath, "userProfile", userName);
+
+  const businessImagePath = folderpath.replace(/\\/g, "/");
+
+  fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: "Error saving image to Server",
+      });
+    }
+  });
+
+  const updateByNumber = { ContactNo: contactNumber };
+  const update = {
+    $set: {
+      Name: name,
+      Gender: gender,
+      DOB: dob,
+      Address: address,
+      Image: `/wda/Images/${userName}.jpg`,
+    },
+  };
+  const result = await User.updateOne(updateByNumber, update);
+  if (result) {
+    return res.send({ success: true, message: "Profile Updated" });
+  } else {
+    return res.send({ success: false, message: "SomeThing Went Wrong" });
+  }
+});
+
+module.exports = {
+  userLogin,
+  sendOtp,
+  verifyOtp,
+  registerUser,
+  updateUserProfile,
+};
