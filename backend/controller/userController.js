@@ -151,6 +151,9 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Update User Profile
+//@Route /api/user/updateUserProfile
+//access Private
 const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, gender, contactNumber, dob, address, profileImagePath } =
     req.body;
@@ -192,10 +195,21 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserProfile = asyncHandler(async (req, res) => {
+  const { contactNo } = req.params;
+  if (!contactNo) {
+    return res.send({ success: false, message: "Getting Error In Profile" });
+  } else {
+    const profile = await User.findOne({ ContactNo: contactNo });
+    res.send({ success: true, userProfile: profile });
+  }
+});
+
 module.exports = {
   userLogin,
   sendOtp,
   verifyOtp,
   registerUser,
   updateUserProfile,
+  getUserProfile,
 };
