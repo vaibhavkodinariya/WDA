@@ -50,4 +50,5 @@ const addImages = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addImages };
+const websiteRegister = asyncHandler(async (req, res) => {});
+module.exports = { addImages, websiteRegister };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { addImages } = require("../controller/businessController");
+const { addImages } = require("../controller/websiteController");
 
 const router = express.Router();
 
