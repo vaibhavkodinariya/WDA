@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
+const Website = require("../models/websiteModel");
 
 //@desc Add Business Images
 //@Route /api/user/addImages
@@ -50,5 +52,82 @@ const addImages = asyncHandler(async (req, res) => {
   }
 });
 
-const websiteRegister = asyncHandler(async (req, res) => {});
+//@desc Website Registeration
+//@Route /api/user/websiteRegister
+//access Private
+const websiteRegister = asyncHandler(async (req, res) => {
+  const {
+    htmlFile,
+    webSiteName,
+    websiteType,
+    dateOfIntegration,
+    corporateIdentificationNo,
+    taxDeductionAccNo,
+    goodsServiceTax,
+    userId,
+  } = req.body;
+  if (
+    !htmlFile ||
+    !webSiteName ||
+    !websiteType ||
+    !dateOfIntegration ||
+    !corporateIdentificationNo ||
+    !taxDeductionAccNo ||
+    !goodsServiceTax ||
+    !userId
+  ) {
+  } else {
+    let isActive = await Website.findOne({ websiteName: webSiteName });
+    if (isActive) {
+      return res.send({
+        success: false,
+        message: "Website Already Registered",
+      });
+    } else {
+      const newPath = path.dirname(__dirname);
+
+      const webSiteNameToStore = webSiteName.replace(/\s+/g, "");
+
+      const folderpath = path.join(newPath, "businessWebsite");
+
+      const htmlBuffer = Buffer.from(htmlFile, "base64");
+
+      zlib.gunzip(htmlBuffer, (err, decompressedHtml) => {
+        if (err) {
+          console.error("Error decompressing HTML:", err);
+          return;
+        }
+
+        fs.writeFile(
+          folderpath + `/` + `${webSiteNameToStore}.html`,
+          decompressedHtml,
+          "utf8",
+          (writeErr) => {
+            if (writeErr) {
+              return res.send({
+                success: false,
+                message: "Error Registering Website",
+              });
+            }
+          }
+        );
+      });
+      const websiteRegisteration = await Website.create({
+        websiteName: webSiteName,
+        websiteType: websiteType,
+        dateOfIntegration: dateOfIntegration,
+        corporateIdentificationNo: corporateIdentificationNo,
+        taxDeductionAccNo: taxDeductionAccNo,
+        goodsAndServicesTax: goodsServiceTax,
+        domainName: `http://localhost:8000/wda/${webSiteNameToStore}.html`,
+        userId: userId,
+      });
+      if (websiteRegisteration) {
+        return res.send({ success: true, message: "Website Registered" });
+      } else {
+        return res.send({ success: false, message: "Something Went Wrong" });
+      }
+    }
+  }
+});
 module.exports = { addImages, websiteRegister };
