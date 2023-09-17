@@ -100,6 +100,9 @@ const sendOtp = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc User Registeration
+//@Route /api/user/verifyOtp
+//access Private
 const verifyOtp = asyncHandler(async (req, res) => {
   const { otpCode, name } = req.body;
   if (!otpCode) {
@@ -118,6 +121,9 @@ const verifyOtp = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc User Registeration
+//@Route /api/user/registerUser
+//access Private
 const registerUser = asyncHandler(async (req, res) => {
   const { name, password, confirmpassword } = req.body;
   if (!password || !confirmpassword) {
