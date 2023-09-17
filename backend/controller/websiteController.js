@@ -4,7 +4,7 @@ const path = require("path");
 const zlib = require("zlib");
 const Website = require("../models/websiteModel");
 
-//@desc Add Business Images
+//@desc Add Website Images
 //@Route /api/user/addImages
 //access Private
 const addImages = asyncHandler(async (req, res) => {
@@ -130,4 +130,39 @@ const websiteRegister = asyncHandler(async (req, res) => {
     }
   }
 });
-module.exports = { addImages, websiteRegister };
+
+//@desc Update Website
+//@Route /api/user/updateWebsite
+//access Private
+const updateRegisteredWebsite = asyncHandler(async (req, res) => {
+  const { updatedWebsiteCode, webSiteName } = req.body;
+  const newPath = path.dirname(__dirname);
+
+  const webSiteNameToStore = webSiteName.replace(/\s+/g, "");
+
+  const folderpath = path.join(newPath, "businessWebsite");
+
+  const htmlBuffer = Buffer.from(updatedWebsiteCode, "base64");
+
+  zlib.gunzip(htmlBuffer, (err, decompressedHtml) => {
+    if (err) {
+      console.error("Error decompressing HTML:", err);
+      return;
+    }
+
+    fs.writeFile(
+      folderpath + `/` + `${webSiteNameToStore}.html`,
+      decompressedHtml,
+      "utf8",
+      (writeErr) => {
+        if (writeErr) {
+          return res.send({
+            success: false,
+            message: "Error Updating Website",
+          });
+        }
+      }
+    );
+  });
+});
+module.exports = { addImages, websiteRegister, updateRegisteredWebsite };
