@@ -190,7 +190,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         Gender: gender,
         DOB: dob,
         Address: address,
-        Image: `${userName}.jpg`,
       },
     };
     const result = await User.updateOne(updateByNumber, update);
