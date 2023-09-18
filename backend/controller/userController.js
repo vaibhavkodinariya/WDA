@@ -182,6 +182,22 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         });
       }
     });
+    const updateByNumber = { ContactNo: contactNumber };
+    const update = {
+      $set: {
+        Name: name,
+        Gender: gender,
+        DOB: dob,
+        Address: address,
+        Image: `${userName}.jpg`,
+      },
+    };
+    const result = await User.updateOne(updateByNumber, update);
+    if (result) {
+      return res.send({ success: true, message: "Profile Updated" });
+    } else {
+      return res.send({ success: false, message: "SomeThing Went Wrong" });
+    }
   } else {
     const updateByNumber = { ContactNo: contactNumber };
     const update = {
@@ -190,6 +206,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         Gender: gender,
         DOB: dob,
         Address: address,
+        Image: `${userName}.jpg`,
       },
     };
     const result = await User.updateOne(updateByNumber, update);
