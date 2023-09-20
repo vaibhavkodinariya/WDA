@@ -26,6 +26,15 @@ const userSchema = mongoose.Schema({
   Address: {
     type: String,
   },
+  City: {
+    type: String,
+  },
+  State: {
+    type: String,
+  },
+  Pincode: {
+    type: String,
+  },
   Image: {
     type: String,
   },

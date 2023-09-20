@@ -161,8 +161,17 @@ const registerUser = asyncHandler(async (req, res) => {
 //@Route /api/user/updateUserProfile
 //access Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const { name, gender, contactNumber, dob, address, profileImagePath } =
-    req.body;
+  const {
+    name,
+    gender,
+    contactNumber,
+    dob,
+    address,
+    city,
+    state,
+    pincode,
+    profileImagePath,
+  } = req.body;
 
   if (profileImagePath) {
     const imageBuffer = Buffer.from(profileImagePath, "base64");
@@ -189,6 +198,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         Gender: gender,
         DOB: dob,
         Address: address,
+        City: city,
+        State: state,
+        Pincode: pincode,
         Image: `${userName}.jpg`,
       },
     };
