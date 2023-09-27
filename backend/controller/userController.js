@@ -232,6 +232,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Get User Profile
+//@Route /api/getUserProfile/:contactNo
+//access Private
 const getUserProfile = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
   if (!contactNo) {
