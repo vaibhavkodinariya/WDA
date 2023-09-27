@@ -258,7 +258,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     fs.renameSync(`${ImagePath}/${newName}`, `${ImagePath}/${userName}}`);
 
-    fs.writeFile(`${businessImagePath}/${name}.jpg`, imageBuffer, (err) => {
+    fs.writeFile(`${ImagePath}/${name}.jpg`, imageBuffer, (err) => {
       if (err) {
         return res.send({
           success: false,
@@ -269,7 +269,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     });
   } else {
-    fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
+    fs.writeFile(`${ImagePath}/${userName}.jpg`, imageBuffer, (err) => {
       if (err) {
         return res.send({
           success: false,
