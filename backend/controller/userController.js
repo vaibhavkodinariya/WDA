@@ -160,6 +160,77 @@ const registerUser = asyncHandler(async (req, res) => {
 //@desc Update User Profile
 //@Route /api/user/updateUserProfile
 //access Private
+// const updateUserProfile = asyncHandler(async (req, res) => {
+//   const {
+//     name,
+//     gender,
+//     contactNumber,
+//     dob,
+//     address,
+//     city,
+//     state,
+//     pincode,
+//     profileImagePath,
+//   } = req.body;
+
+//   if (profileImagePath) {
+//     const imageBuffer = Buffer.from(profileImagePath, "base64");
+
+//     const newPath = path.dirname(__dirname);
+
+//     const userName = name.replace(/\s+/g, "");
+
+//     const folderpath = path.join(newPath, "userProfile");
+
+//     const businessImagePath = folderpath.replace(/\\/g, "/");
+//     fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
+//       if (err) {
+//         return res.send({
+//           success: false,
+//           message: "Error saving image to Server",
+//         });
+//       }
+//     });
+//     const updateByNumber = { ContactNo: contactNumber };
+//     const update = {
+//       $set: {
+//         Name: name,
+//         Gender: gender,
+//         DOB: dob,
+//         Address: address,
+//         City: city,
+//         State: state,
+//         Pincode: pincode,
+//         Image: `${userName}.jpg`,
+//       },
+//     };
+//     const result = await User.updateOne(updateByNumber, update);
+//     if (result) {
+//       return res.send({ success: true, message: "Profile Updated" });
+//     } else {
+//       return res.send({ success: false, message: "SomeThing Went Wrong" });
+//     }
+//   } else {
+//     const updateByNumber = { ContactNo: contactNumber };
+//     const update = {
+//       $set: {
+//         Name: name,
+//         Gender: gender,
+//         DOB: dob,
+//         Address: address,
+//         City: city,
+//         State: state,
+//         Pincode: pincode,
+//       },
+//     };
+//     const result = await User.updateOne(updateByNumber, update);
+//     if (result) {
+//       return res.send({ success: true, message: "Profile Updated" });
+//     } else {
+//       return res.send({ success: false, message: "SomeThing Went Wrong" });
+//     }
+//   }
+// });
 const updateUserProfile = asyncHandler(async (req, res) => {
   const {
     name,
@@ -173,16 +244,36 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     profileImagePath,
   } = req.body;
 
-  if (profileImagePath) {
+  const updateByNumber = { ContactNo: contactNumber };
+  const update = {
+    $set: {
+      Name: name,
+      Gender: gender,
+      DOB: dob,
+      Address: address,
+      City: city,
+      State: state,
+      Pincode: pincode,
+      Image: `${userName}.jpg`,
+    },
+  };
+
+  const result = await User.updateOne(updateByNumber, update);
+
+  if (result) {
+    // return res.send({ success: true, message: "Profile Updated" });
     const imageBuffer = Buffer.from(profileImagePath, "base64");
 
     const newPath = path.dirname(__dirname);
 
-    const userName = name.replace(/\s+/g, "");
+    const dataProfile = await User.findOne({ ContactNo: contactNumber });
+
+    const userName = dataProfile.Name.replace(/\s+/g, "");
 
     const folderpath = path.join(newPath, "userProfile");
 
     const businessImagePath = folderpath.replace(/\\/g, "/");
+
     fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
       if (err) {
         return res.send({
@@ -191,44 +282,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         });
       }
     });
-    const updateByNumber = { ContactNo: contactNumber };
-    const update = {
-      $set: {
-        Name: name,
-        Gender: gender,
-        DOB: dob,
-        Address: address,
-        City: city,
-        State: state,
-        Pincode: pincode,
-        Image: `${userName}.jpg`,
-      },
-    };
-    const result = await User.updateOne(updateByNumber, update);
-    if (result) {
-      return res.send({ success: true, message: "Profile Updated" });
-    } else {
-      return res.send({ success: false, message: "SomeThing Went Wrong" });
-    }
   } else {
-    const updateByNumber = { ContactNo: contactNumber };
-    const update = {
-      $set: {
-        Name: name,
-        Gender: gender,
-        DOB: dob,
-        Address: address,
-        City: city,
-        State: state,
-        Pincode: pincode,
-      },
-    };
-    const result = await User.updateOne(updateByNumber, update);
-    if (result) {
-      return res.send({ success: true, message: "Profile Updated" });
-    } else {
-      return res.send({ success: false, message: "SomeThing Went Wrong" });
-    }
+    return res.send({ success: false, message: "SomeThing Went Wrong" });
   }
 });
 
