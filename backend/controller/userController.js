@@ -245,6 +245,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   } = req.body;
 
   const updateByNumber = { ContactNo: contactNumber };
+  const newName = name.replace(/\s+/g, "");
   const update = {
     $set: {
       Name: name,
@@ -254,7 +255,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       City: city,
       State: state,
       Pincode: pincode,
-      Image: `${userName}.jpg`,
+      Image: `${newName}.jpg`,
     },
   };
 
