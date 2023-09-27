@@ -280,6 +280,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           success: false,
           message: "Error saving image to Server",
         });
+      } else {
+        return res.send({ success: true, message: "Profile Updated" });
       }
     });
   } else {
