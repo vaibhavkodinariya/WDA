@@ -270,7 +270,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         City: city,
         State: state,
         Pincode: pincode,
-        Image: `${updateName}.jpg`,
+        Image: `${newName}.jpg`,
       },
     };
     const result = await User.updateOne(updateByNumber, update);
