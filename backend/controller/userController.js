@@ -244,8 +244,43 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     profileImagePath,
   } = req.body;
 
+  const dataProfile = await User.findOne({ ContactNo: contactNumber });
+  const imageBuffer = Buffer.from(profileImagePath, "base64");
+  const newPath = path.dirname(__dirname);
+
+  const userName = dataProfile.Name.replace(/\s+/g, "");
+  const folderpath = path.join(newPath, "userProfile");
+  const ImagePath = folderpath.replace(/\\/g, "/");
+  var updateName;
+  if (fs.existsSync(`${ImagePath}/${userName}`)) {
+    const newName = dataProfile.Name.replace(/\s+/g, "");
+    fs.unlinkSync(`${ImagePath}/${userName}`);
+
+    fs.renameSync(`${ImagePath}/${newName}`, `${ImagePath}/${userName}}`);
+
+    fs.writeFile(`${businessImagePath}/${name}.jpg`, imageBuffer, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error saving image to Server",
+        });
+      } else {
+        updateName = newName;
+      }
+    });
+  } else {
+    fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error saving image to Server",
+        });
+      } else {
+        updateName = userName;
+      }
+    });
+  }
   const updateByNumber = { ContactNo: contactNumber };
-  const newName = name.replace(/\s+/g, "");
   const update = {
     $set: {
       Name: name,
@@ -255,36 +290,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       City: city,
       State: state,
       Pincode: pincode,
-      Image: `${newName}.jpg`,
+      Image: `${updateName}.jpg`,
     },
   };
-
   const result = await User.updateOne(updateByNumber, update);
-
   if (result) {
-    // return res.send({ success: true, message: "Profile Updated" });
-    const imageBuffer = Buffer.from(profileImagePath, "base64");
-
-    const newPath = path.dirname(__dirname);
-
-    const dataProfile = await User.findOne({ ContactNo: contactNumber });
-
-    const userName = dataProfile.Name.replace(/\s+/g, "");
-
-    const folderpath = path.join(newPath, "userProfile");
-
-    const businessImagePath = folderpath.replace(/\\/g, "/");
-
-    fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: "Error saving image to Server",
-        });
-      } else {
-        return res.send({ success: true, message: "Profile Updated" });
-      }
-    });
+    return res.send({ success: true, message: "Profile Updated" });
   } else {
     return res.send({ success: false, message: "SomeThing Went Wrong" });
   }
