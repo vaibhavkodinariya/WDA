@@ -264,10 +264,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           success: false,
           message: "Error saving image to Server",
         });
-      } else {
-        updateName = newName;
       }
     });
+    updateName = newName;
   } else {
     fs.writeFile(`${ImagePath}/${userName}.jpg`, imageBuffer, (err) => {
       if (err) {
@@ -275,10 +274,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           success: false,
           message: "Error saving image to Server",
         });
-      } else {
-        updateName = userName;
       }
     });
+    updateName = userName;
   }
   const updateByNumber = { ContactNo: contactNumber };
   const update = {
