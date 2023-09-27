@@ -248,17 +248,39 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const imageBuffer = Buffer.from(profileImagePath, "base64");
   const newPath = path.dirname(__dirname);
 
-  const userName = dataProfile.Name.replace(/\s+/g, "");
+  // const userName = dataProfile.Name.replace(/\s+/g, "");
   const folderpath = path.join(newPath, "userProfile");
   const ImagePath = folderpath.replace(/\\/g, "/");
   var updateName;
-  if (fs.existsSync(`${ImagePath}/${userName}`)) {
-    const newName = dataProfile.Name.replace(/\s+/g, "");
-    fs.unlinkSync(`${ImagePath}/${userName}`);
+  const newName = name.replace(/\s+/g, "");
+  if (fs.existsSync(`${ImagePath}/${dataProfile.Image}`)) {
+    fs.unlinkSync(`${ImagePath}/${dataProfile.Image}`);
 
-    fs.renameSync(`${ImagePath}/${newName}`, `${ImagePath}/${userName}}`);
-
-    fs.writeFile(`${ImagePath}/${name}.jpg`, imageBuffer, (err) => {
+    fs.renameSync(
+      `${ImagePath}/${newName}`,
+      `${ImagePath}/${dataProfile.Image}}`
+    );
+    const updateByNumber = { ContactNo: contactNumber };
+    const update = {
+      $set: {
+        Name: name,
+        Gender: gender,
+        DOB: dob,
+        Address: address,
+        City: city,
+        State: state,
+        Pincode: pincode,
+        Image: `${updateName}.jpg`,
+      },
+    };
+    const result = await User.updateOne(updateByNumber, update);
+    if (result) {
+      return res.send({ success: true, message: "Profile Updated" });
+    } else {
+      return res.send({ success: false, message: "SomeThing Went Wrong" });
+    }
+  } else {
+    fs.writeFile(`${ImagePath}/${newName}.jpg`, imageBuffer, (err) => {
       if (err) {
         return res.send({
           success: false,
@@ -266,36 +288,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         });
       }
     });
-    updateName = newName;
-  } else {
-    fs.writeFile(`${ImagePath}/${userName}.jpg`, imageBuffer, (err) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: "Error saving image to Server",
-        });
-      }
-    });
-    updateName = userName;
-  }
-  const updateByNumber = { ContactNo: contactNumber };
-  const update = {
-    $set: {
-      Name: name,
-      Gender: gender,
-      DOB: dob,
-      Address: address,
-      City: city,
-      State: state,
-      Pincode: pincode,
-      Image: `${updateName}.jpg`,
-    },
-  };
-  const result = await User.updateOne(updateByNumber, update);
-  if (result) {
-    return res.send({ success: true, message: "Profile Updated" });
-  } else {
-    return res.send({ success: false, message: "SomeThing Went Wrong" });
   }
 });
 
