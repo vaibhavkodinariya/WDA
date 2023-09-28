@@ -160,77 +160,6 @@ const registerUser = asyncHandler(async (req, res) => {
 //@desc Update User Profile
 //@Route /api/user/updateUserProfile
 //access Private
-// const updateUserProfile = asyncHandler(async (req, res) => {
-//   const {
-//     name,
-//     gender,
-//     contactNumber,
-//     dob,
-//     address,
-//     city,
-//     state,
-//     pincode,
-//     profileImagePath,
-//   } = req.body;
-
-//   if (profileImagePath) {
-//     const imageBuffer = Buffer.from(profileImagePath, "base64");
-
-//     const newPath = path.dirname(__dirname);
-
-//     const userName = name.replace(/\s+/g, "");
-
-//     const folderpath = path.join(newPath, "userProfile");
-
-//     const businessImagePath = folderpath.replace(/\\/g, "/");
-//     fs.writeFile(`${businessImagePath}/${userName}.jpg`, imageBuffer, (err) => {
-//       if (err) {
-//         return res.send({
-//           success: false,
-//           message: "Error saving image to Server",
-//         });
-//       }
-//     });
-//     const updateByNumber = { ContactNo: contactNumber };
-//     const update = {
-//       $set: {
-//         Name: name,
-//         Gender: gender,
-//         DOB: dob,
-//         Address: address,
-//         City: city,
-//         State: state,
-//         Pincode: pincode,
-//         Image: `${userName}.jpg`,
-//       },
-//     };
-//     const result = await User.updateOne(updateByNumber, update);
-//     if (result) {
-//       return res.send({ success: true, message: "Profile Updated" });
-//     } else {
-//       return res.send({ success: false, message: "SomeThing Went Wrong" });
-//     }
-//   } else {
-//     const updateByNumber = { ContactNo: contactNumber };
-//     const update = {
-//       $set: {
-//         Name: name,
-//         Gender: gender,
-//         DOB: dob,
-//         Address: address,
-//         City: city,
-//         State: state,
-//         Pincode: pincode,
-//       },
-//     };
-//     const result = await User.updateOne(updateByNumber, update);
-//     if (result) {
-//       return res.send({ success: true, message: "Profile Updated" });
-//     } else {
-//       return res.send({ success: false, message: "SomeThing Went Wrong" });
-//     }
-//   }
-// });
 const updateUserProfile = asyncHandler(async (req, res) => {
   const {
     name,
@@ -258,15 +187,17 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         `${ImagePath}/${newName}.jpg`
       );
     } else {
-      fs.unlinkSync(`${ImagePath}/${dataProfile.Image}`);
-      fs.writeFile(`${ImagePath}/${newName}.jpg`, imageBuffer, (err) => {
-        if (err) {
-          return res.send({
-            success: false,
-            message: "Error saving image to Server",
-          });
-        }
-      });
+      if (imageBuffer != "") {
+        fs.unlinkSync(`${ImagePath}/${dataProfile.Image}`);
+        fs.writeFile(`${ImagePath}/${newName}.jpg`, imageBuffer, (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: "Error saving image to Server",
+            });
+          }
+        });
+      }
     }
   } else {
     fs.writeFile(`${ImagePath}/${newName}.jpg`, imageBuffer, (err) => {
