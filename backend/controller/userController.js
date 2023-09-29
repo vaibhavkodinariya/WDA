@@ -245,6 +245,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Get User Profile
+//@Route /api/getUserWebsites/:userId
+//access Private
 const getUserWebsites = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   if (!userId) {

@@ -821,7 +821,7 @@
       </div>
       <div class="logo">
         <img
-          src="https://miro.medium.com/v2/da:true/resize:fit:700/1*KJACFKJ0GKtnhgR7OmlPFA.gif"
+          src=""
           class="fileInput"
           id="image1"
           alt="logo"
@@ -929,6 +929,7 @@
             src="https://img.freepik.com/free-vector/human-blood-donate-white-background_1308-111266.jpg?w=4000"
             alt=" Donate-home-page"
             contenteditable="false"
+            onclick="chooseFile()"
           />
         </div>
       </section>
@@ -1419,7 +1420,7 @@
         const img = document.getElementById(imgdata.id);
 
         if (img) {
-          img.src = "http://${ipaddress}/" + imgdata.url;
+          img.src = "http://172.16.12.5:8000/" + imgdata.url;
         }
       }
     </script>
