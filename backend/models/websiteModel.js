@@ -9,7 +9,7 @@ const websiteSchema = mongoose.Schema({
     type: String,
     required: [true, "Please Enter Type Of User"],
   },
-  dateOfIntegration: {
+  dateOfIncorporation: {
     type: String,
     required: [true, "please enter password"],
   },

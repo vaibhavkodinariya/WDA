@@ -1,8 +1,8 @@
 const express = require("express");
-const {} = require("../controller/adminController");
+const { getWebSiteStatusByNumber } = require("../controller/adminController");
 
 const router = express.Router();
 
-router.get("/webSiteStatus/:contactNo", userLogin);
+router.get("/webSiteStatus/:contactNo", getWebSiteStatusByNumber);
 
 module.exports = router;

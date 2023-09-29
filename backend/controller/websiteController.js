@@ -60,7 +60,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
     htmlFile,
     webSiteName,
     websiteType,
-    dateOfIntegration,
+    dateOfIncorporation,
     corporateIdentificationNo,
     taxDeductionAccNo,
     goodsServiceTax,
@@ -70,7 +70,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
     !htmlFile ||
     !webSiteName ||
     !websiteType ||
-    !dateOfIntegration ||
+    !dateOfIncorporation ||
     !corporateIdentificationNo ||
     !taxDeductionAccNo ||
     !goodsServiceTax ||
@@ -115,7 +115,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
       const websiteRegisteration = await Website.create({
         websiteName: webSiteName,
         websiteType: websiteType,
-        dateOfIntegration: dateOfIntegration,
+        dateOfIncorporation: dateOfIncorporation,
         corporateIdentificationNo: corporateIdentificationNo,
         taxDeductionAccNo: taxDeductionAccNo,
         goodsAndServicesTax: goodsServiceTax,
