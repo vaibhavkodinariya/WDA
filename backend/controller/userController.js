@@ -4,6 +4,8 @@ const bcry = require("bcrypt");
 const fs = require("fs");
 const path = require("path");
 const storage = require("node-persist");
+const Website = require("../models/websiteModel");
+
 const delay = 2 * 60 * 1000;
 const client = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
@@ -243,6 +245,16 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserWebsites = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  if (!userId) {
+    return res.send({ success: false, message: "Invalid User" });
+  } else {
+    const fetchedData = await Website.find({ userId: userId });
+    res.send({ success: true, websiteDetails: fetchedData });
+  }
+});
+
 module.exports = {
   userLogin,
   sendOtp,
@@ -250,4 +262,5 @@ module.exports = {
   registerUser,
   updateUserProfile,
   getUserProfile,
+  getUserWebsites,
 };

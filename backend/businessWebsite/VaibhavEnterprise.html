@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>We Care</title>
+    <title contenteditable="true">We Care</title>
     <script>
       function chooseFile() {
         AndroidInterface.showFileChooser(event.target.id);
@@ -12,13 +12,14 @@
         console.log(filePaths);
       }
     </script>
+    <!---- Font Awesome Cdn Linkage ------>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
     <!------- Favicon Linkage --------->
     <link rel="shortcut icon" href="fav.png" type="x-icon" />
-    <style contenteditable="True">
+    <style>
       @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap");
       * {
         margin: 0;
@@ -26,10 +27,43 @@
         box-sizing: border-box;
         text-decoration: none;
         list-style: none;
-        scroll-behavior: smooth;
+        scroll-behavior: smooth; /* font-family: sans-serif; */
+      } /* ::-webkit-scrollbar-track {    visibility: hidden;  } */
+      ::-webkit-scrollbar {
+        width: 0.5em; /* Adjust the width as needed */
       }
       :root {
         --body: #fff;
+      }
+      .editable {
+        position: relative;
+      }
+      .editable:focus .counter {
+        display: block;
+        position: relative;
+        right: 20px;
+        bottom: -20px;
+        color: #777;
+      }
+      .counter {
+        position: absolute;
+        right: 20px; /* bottom: -20px; */
+        color: #777;
+        display: none;
+      }
+      [contenteditable="true"] {
+        /* outline: none; */
+        resize: none;
+        overflow: hidden;
+        border: #777 1px;
+        margin-block: 5px;
+      }
+      [contenteditable="true"]:empty:focus::before {
+        content: "Click to start typing";
+        color: #aaa;
+      }
+      [contenteditable="true"]:empty::before {
+        content: ""; /* Clear the message when the element is focused */
       }
       section {
         margin-top: 80px;
@@ -51,21 +85,40 @@
         position: fixed;
         width: 100vw;
         top: 0;
-        left: 0; /* min-height: 50px; */
+        left: 0;
+        min-height: 8vh;
         box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.2);
         z-index: 100; /* position: relative; */
       }
+      .heading {
+        font-size: 35px;
+        color: #c91c1c;
+        line-height: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 30px;
+      }
       nav.navigation {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 80vw;
+        /* display: flex; */ /* justify-content: space-between;    align-items: center; */ /* width: 100%; */
         margin: 0 auto;
         padding: 10px 0;
+        float: right;
+        position: relative;
+        top: 4px;
       }
-      nav.navigation .logo img {
-        height: 30px;
-        width: auto;
+      .logo {
+        height: auto;
+        width: 20%;
+        padding: 5px;
+        position: fixed;
+        margin-left: 20px; /* display: grid; */
+      }
+      .logo img {
+        object-fit: contain;
+        width: 150px;
+        height: 40px;
+        aspect-ratio: 3/4;
       }
       nav.navigation .nav-list ul li {
         display: inline-block;
@@ -75,32 +128,49 @@
         font-size: 18px;
         transition: all 0.5s ease;
         color: #c91c1cc7;
-      } /* nav.navigation .nav-list ul li a:hover {  color: #db1e1e;} */
+      } /* nav.navigation .logo img{     object-fit: contain;     width: 80px;     height: 60px;    } */
       #toogle {
         display: none;
       }
-      @media (max-width: 923px) {
+      @media (max-width: 600px) {
         header {
-          min-height: 70px;
+          min-height: 70px; /* height: ; */ /* position: fixed; */
         }
-        nav.navigation .logo {
-          display: none;
+        .logo {
+          position: absolute;
+          left: 75%;
+          width: 90%;
+          height: 70%;
+          margin-left: 2px;
+        }
+        .logo img {
+          right: 42px;
+          top: 3px;
+          position: relative;
+          object-fit: contain;
+          width: 125px;
+          height: 52px; /* text-align: center; */
         }
         nav.navigation .nav-list {
-          margin: 10px auto;
+          margin: 8px auto;
+          position: relative; /* align-items: center; */
+          right: 30px;
         }
         nav.navigation .nav-list ul {
-          display: none;
+          display: none; /* background-color: gray; */
           justify-content: center;
           align-items: center;
           flex-direction: column;
-          gap: 10px;
+          width: 100%;
+          height: 100vh; /* overflow-y: visible; */ /* scroll-behavior: smooth; */ /* gap: 10px; */
         }
         .tbox {
           height: 50px;
           width: 50px;
           cursor: pointer;
           position: absolute;
+          z-index: 2;
+          background-color: transparent;
         }
         #toogle {
           height: 2px;
@@ -146,12 +216,26 @@
           bottom: -2px;
           left: 0px;
         }
+        nav.navigation:active {
+          overflow: hidden;
+          scroll-behavior: none;
+          background-position: fixed;
+          display: fixed;
+        }
         nav.navigation .nav-list.active ul {
           display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
           padding: 10px;
+          right: 70px;
+          top: -69px;
+          position: relative;
+          width: 20%;
         }
         nav.navigation .nav-list.active ul li {
-          margin: 20px 0; /* height: 100vh; */
+          margin: 20px 0;
+          color: #f2f2f2;
+          width: 100px;
         }
       }
       section.home {
@@ -190,7 +274,7 @@
       }
       section.home .intro span a {
         color: var(--body);
-      } /* section.home .intro span:hover {  background-color: var(--body);  border-color: #c91c1c;}section.home .intro span:hover a {  color: #c91c1c;} */
+      }
       section.home .home-img {
         width: 50%;
         object-fit: cover;
@@ -200,7 +284,7 @@
       }
       section.home .home-img img {
         width: 70%; /* animation: anime 6s infinite linear; */
-      } /* @keyframes anime {  0% {    transform: translateY(0px);  }  25% {    transform: translateY(-8px);  }  50% {    transform: translateY(0px);  }  75% {    transform: translateY(10px);  }  100% {    transform: translateY(0px);  }} */
+      }
       @media (max-width: 650px) {
         section.home {
           flex-direction: column;
@@ -230,7 +314,7 @@
         align-items: center;
       }
       .about-container .img img {
-        width: 90%;
+        width: 85%;
         animation: anime 6s infinite linear;
       }
       .about-container .text {
@@ -238,7 +322,7 @@
       }
       .about-container .text p {
         margin: 20px 0px;
-        font-size: 15px;
+        font-size: 20px;
         color: #373738;
         line-height: 30px;
         font-weight: 400;
@@ -247,6 +331,7 @@
         .about-container {
           flex-direction: column;
           margin-top: 80px;
+          width: 100%;
         }
         .about-container .text,
         .about-container .img {
@@ -265,6 +350,7 @@
         grid-gap: 20px;
         width: 90vw;
         margin: 30px auto;
+        justify-items: center;
       }
       .services .service-container .box {
         margin: 20px 0px;
@@ -279,6 +365,7 @@
         color: #880808;
         font-size: 40px;
         margin: 10px;
+        text-align: center;
       }
       .services .service-container .box h3 {
         color: #854054;
@@ -286,35 +373,48 @@
         padding: 10px 0px;
         font-size: 20px;
         font-weight: 500;
+        margin: 1.25rem 0rem;
+        width: 250px;
+        text-align: center;
       }
       .services .service-container .box p {
         font-size: 15px;
         line-height: 24px;
         font-weight: 400;
         color: #373738;
-      }
-      @media (max-width: 910px) {
-        .services .service-container {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-      @media (max-width: 700px) {
+        margin: 1.25rem 0rem;
+        width: 250px;
+        text-align: center;
+      } /* Media query for screens between 768px and 991px (tablet view) */
+      @media (min-width: 768px) and (max-width: 991px) {
         .services .service-container {
           grid-template-columns: repeat(2, 1fr);
+          width: 90%; /* Adjust the width as needed */
         }
-      }
-      @media (max-width: 400px) {
+      } /* Media query for screens smaller than 768px (mobile view) */
+      @media (max-width: 767px) {
         .services .service-container {
           grid-template-columns: repeat(1, 1fr);
+          width: 90%; /* Adjust the width as needed */
+        }
+      } /* Media query for screens smaller than 400px (smaller mobile view) */
+      @media (max-width: 400px) {
+        .services .service-container {
+          width: 95%; /* Adjust the width as needed */
+        }
+        .services .service-container .box h3 {
+          left: 0; /* Adjust the left offset as needed */
+        }
+        .services .service-container .box p {
+          left: 0; /* Adjust the left offset as needed */
         }
       }
-      .gallary-img {
+      .gallery-img {
         width: 90vw;
         margin: 30px auto;
       }
       .gbox {
-        /* display: grid;      grid-gap: 20px;      grid-template-columns: repeat(3, 1fr); */
-        display: flex; /* align-content: center; */
+        display: flex;
         align-items: center;
         flex-wrap: wrap;
         justify-content: center;
@@ -326,7 +426,7 @@
         width: 350px;
       }
       div.subContainer {
-        width: 80%; /* height: 80%; */ /* margin: 5px; */
+        width: 80%;
         display: flex;
         align-self: center;
         position: relative;
@@ -344,85 +444,23 @@
       div.desc {
         padding: 15px;
         text-align: center;
+        margin: 1.2rem;
+        width: 250px;
+        position: relative;
+        left: 30px;
       }
       @media (max-width: 412px) {
         div.gallery,
         div.gallery img {
           width: 100%;
         }
-      }
-      .contact {
-        width: 90vw;
-        margin: 0 auto;
-      }
-      .contact h1,
-      .heading {
-        font-size: 35px;
-        color: #c91c1c;
-        line-height: 50px;
-        font-weight: 700;
-        text-transform: uppercase;
-        text-align: center;
-        margin-bottom: 30px;
-      }
-      .contact .input-wrap {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 2rem;
-        margin-bottom: 2rem;
-      }
-      .contact .input-wrap-2 {
-        display: flex;
-        flex-direction: column;
-      }
-      .contact input {
-        padding: 0.6rem;
-        border: 1px solid #ddd;
-        font-size: 0.9rem;
-        background-color: #e6e6e6;
-      }
-      .contact .input-wrap-2 input {
-        margin-bottom: 2rem;
-        border: 1px solid #ddd;
-        font-size: 0.9rem;
-        background-color: #e6e6e6;
-      }
-      .contact .input-wrap-2 textarea {
-        padding: 0.6rem;
-        border: 1px solid #ddd;
-        margin-bottom: 2rem;
-        font-size: 0.9rem;
-        background-color: #e6e6e6;
-      }
-      .contact input:focus {
-        outline: none;
-      }
-      .contact textarea:focus {
-        outline: none;
-      }
-      .contact .btn-wrapper {
-        text-align: center;
-      }
-      .contact .btn {
-        width: 90vw;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 30px;
-      }
-      .contact .btn button {
-        outline: none;
-        color: var(--body);
-        background-color: #c91c1c;
-        cursor: pointer;
-        font-size: 1rem;
-        padding: 1.075rem 1.25rem;
-        transition: ease-in-out 0.7s;
-        border: 1px solid transparent;
-      } /* .contact .btn button:hover {  background-color: var(--body);  color: #c91c1c;  border-color: #c91c1c;} */
-      @media (max-width: 462px) {
-        .contact .input-wrap {
-          grid-template-columns: repeat(1, 1fr);
+        div.desc {
+          padding: 15px;
+          text-align: center;
+          margin: 0.25rem 0rem;
+          width: 250px;
+          position: relative;
+          left: 32px;
         }
       }
       footer {
@@ -445,27 +483,6 @@
         line-height: 28px;
         font-size: 14px;
       }
-      footer .footer-content .solink {
-        list-style: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px 0 30px 0;
-      }
-      footer .footer-content .solink li {
-        margin: 0 10px;
-      }
-      footer .footer-content .solink a {
-        text-decoration: none;
-        color: #db1e1e;
-        transition: all 0.5s ease;
-      }
-      footer .footer-content .solink a i {
-        font-size: 20px;
-      }
-      footer .footer-content .solink a:hover i {
-        color: #fd1b5b;
-      }
       footer .footer-bottom {
         background: #db1e1e70;
         width: 100%;
@@ -473,22 +490,10 @@
         text-align: center;
         color: #c91c1c;
       }
-      ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 6px #0000004d;
-        background-color: var(--body);
-      }
-      ::-webkit-scrollbar {
-        width: 15px;
-        background-color: var(--body);
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: #c91c1c;
-        border-radius: 10px;
-      }
       .section-team {
         width: 90vw;
         margin: 30px auto;
-        min-height: 100vh;
+        min-height: 90vh;
       }
       .section-team .container {
         position: relative;
@@ -517,25 +522,20 @@
         border-radius: 20px;
         overflow: hidden;
         transition: 1s;
-      } /* .section-team .container .card:hover .imgbox {  transform: translateY(30px) scale(0.5) rotate(360deg);} */
+      }
       .section-team .container .card .imgbox img {
         object-fit: contain;
         width: 100%;
         height: 63%;
-        transform: scale(0.7); /* top: 10px; */
-      }
+        transform: scale(0.7);
+        aspect-ratio: 3/4;
+      } /* .section-team .container .card .content {    position: absolute;    top: -50px;    left: 0;    width: 100%;    height: 100%;    display: flex;    justify-content: center;    align-items: flex-end;    padding-bottom: 30px;    transition: 0.5s;     } */
       .section-team .container .card .content {
-        position: absolute;
-        top: 0;
+        position: relative;
         left: 0;
         width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        padding-bottom: 30px;
-        transition: 0.5s; /* transform: translateY(100%); */
-      } /* .section-team .container .card:hover .content {  transform: translateY(0);} */
+        transform: translateY(215px);
+      }
       .section-team .container .card .content .details {
         display: flex;
         flex-direction: column;
@@ -553,22 +553,6 @@
         color: #f2f2f2;
         font-weight: 500;
       }
-      .section-team .container .card .content .details .social {
-        display: flex;
-        margin-top: 7px;
-      }
-      .section-team .container .card .content .details .social li a {
-        height: 45px;
-        width: 45px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 5px;
-        background-color: #db1e1e;
-        border-radius: 50%;
-        color: #fff;
-        font-size: 20px; /* transition: 0.5s; */
-      } /* .section-team .container .card .content .details .social li a:hover {  transform: rotate(360deg);} */
       .img-folder {
         height: 400px;
         width: 400px;
@@ -579,24 +563,95 @@
       .img-folder img {
         width: 100%;
         height: 80%;
-        animation: animeX 6s infinite linear;
+      } /* contact form style */
+      .container_contact {
+        align-content: center;
+        justify-content: center;
+        border-radius: 6px;
       }
-      @keyframes animeX {
-        0% {
-          transform: translateX(0px);
+      .container_contact .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* max-width: 70%; */ /* margin: 20px auto; */
+        padding: 20px;
+      }
+      .container_contact .content .contact-side {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-top: 15px;
+        position: relative;
+      }
+      .content .contact-side .details {
+        margin: 14px;
+        text-align: center;
+      }
+      .content .contact-side .details i {
+        font-size: 30px;
+        color: #880808;
+        margin-bottom: 10px;
+      }
+      .content .contact-side .details .topic {
+        font-size: 18px;
+        font-weight: 500;
+        color: #854054;
+        padding-bottom: 5px;
+      }
+      .content .contact-side .details .text-one,
+      .content .contact-side .details .text-two {
+        font-size: 14px;
+        color: #c91c1c;
+        width: 70%;
+        position: relative;
+        margin: auto;
+        margin-bottom: 3px;
+        white-space: pre-line;
+        padding-block: 1% 1%;
+        padding-inline: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      @media (max-width: 600px) {
+        .container_contact {
+          margin: 20px 0;
+          height: 100%;
         }
-        25% {
-          transform: translateX(-30px);
+        .container_contact .content {
+          flex-direction: column-reverse;
         }
-        50% {
-          transform: translateX(0px);
+        .container_contact .content .contact-side {
+          width: 100%;
+          flex-direction: column;
+          margin-top: 40px;
+          justify-content: center;
+          flex-wrap: wrap;
         }
-        75% {
-          transform: translateX(30px);
+        .container .content .contact-side::before {
+          display: none;
         }
-        100% {
-          transform: translateX(0px);
+        .container .content .right-side {
+          width: 100%;
+          margin-left: 0;
         }
+        .content .contact-side .details {
+          margin: 14px;
+          text-align: center;
+          white-space: nowrap;
+          width: 95%;
+          line-height: 2ch;
+        }
+      }
+      .address,
+      .phone,
+      .email {
+        width: 30%;
+      }
+      .text {
+        width: 100%;
+        line-break: normal;
       }
     </style>
   </head>
@@ -604,51 +659,119 @@
     <!---- Navigation ------>
     <header>
       <div class="tbox" id="tbox"><div id="toogle"></div></div>
+      <div class="logo">
+        <img
+          src="https://miro.medium.com/v2/da:true/resize:fit:700/1*KJACFKJ0GKtnhgR7OmlPFA.gif"
+          class="fileInput"
+          id="image1"
+          alt="logo"
+          onclick="chooseFile()"
+        />
+        &nbsp;
+      </div>
       <nav class="navigation">
-        <div class="logo">
-          <img
-            src="logo2.png"
-            class="fileInput"
-            id="image1"
-            alt="logo"
-            onclick="chooseFile()"
-          />
-        </div>
         <div class="nav-list" id="nav-list">
           <ul>
-            <li><a class="list" href="#home">Home</a></li>
-            <li><a class="list" href="#about">About</a></li>
-            <li><a class="list" href="#services">Services</a></li>
-            <li><a class="list" href="#gallery">Gallery</a></li>
-            <li><a class="list" href="#contact">Contact</a></li>
-            <li><a class="list" href="#team">Team</a></li>
+            <li>
+              <a
+                class="list editable"
+                href="#home"
+                contenteditable="true"
+                data-max-chars="20"
+                >Home</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
+            <li>
+              <a
+                class="list editable"
+                href="#about"
+                contenteditable="true"
+                data-max-chars="20"
+                >About</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
+            <li>
+              <a
+                class="list editable"
+                href="#services"
+                contenteditable="true"
+                data-max-chars="20"
+                >Services</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
+            <li>
+              <a
+                class="list editable"
+                href="#gallery"
+                contenteditable="true"
+                data-max-chars="20"
+                >Gallery</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
+            <li>
+              <a
+                class="list editable"
+                href="#contact"
+                contenteditable="true"
+                data-max-chars="20"
+                >Contact</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
+            <li>
+              <a
+                class="list editable"
+                href="#team"
+                contenteditable="true"
+                data-max-chars="20"
+                >Team</a
+              >
+              <div class="charCount" style="display: none"></div>
+            </li>
           </ul>
         </div>
       </nav>
+      <!-- <div class="counter" id="charCount" contenteditable="false">Total chars: 0 (100 remaining)</div> -->
     </header>
     <!---- Navigation End ------>
     <!---- Home Section ------>
     <div id="1">
       <section class="home" id="home">
-        <div class="intro" contenteditable="True">
-          <h1>You are someone's Hero - donate blood</h1>
-          <p>
+        <div class="intro">
+          <h1 class="editable" contenteditable="true" data-max-chars="100">
+            You are someone's Hero - donate blood
+          </h1>
+          <div class="charCount" style="display: none"></div>
+          <p class="editable" contenteditable="true" data-max-chars="500">
             In as little as few minutes, you can become someone's unnamed,
             unknown, but all-important Hero. Saving a life is a noble work that
             starts very simply and easily. Donate Blood or donate Money, every
             form of contribution you make is important, valued and essential in
             our shared mission to save lives.
           </p>
-          <span contenteditable="False"><a href="#contact">Contact Us</a></span>
-          <span contenteditable="False"
-            ><a href="#" contenteditable="True">Donate Now</a></span
-          >
+          <div class="charCount" style="display: none"></div>
+          <span type="button" id="button" contenteditable="false">
+            <a
+              href="#contact"
+              class="editable"
+              contenteditable="true"
+              data-max-chars="20"
+            >
+              Contact Us
+            </a>
+            <div class="charCount" style="display: none"></div>
+          </span>
+          <!-- <span contenteditable="False" type="button" id="button" >          <a href="#" contenteditable="true" class="editable" data-max-chars="20"> Donate Now</a>        </span> -->
         </div>
-        <div class="home-img" contenteditable="false">
+        <div class="home-img">
           <img
             class="fileInput"
             id="image2"
-            src=""
+            src="https://img.freepik.com/free-vector/human-blood-donate-white-background_1308-111266.jpg?w=4000"
             alt=" Donate-home-page"
             contenteditable="false"
           />
@@ -660,19 +783,22 @@
     <!---- About Section ------>
     <div id="2">
       <section class="about">
-        <h1 class="heading">About Us</h1>
+        <h1 class="heading editable" contenteditable="true" data-max-chars="20">
+          About Us
+        </h1>
+        <div class="charCount" style="display: none"></div>
         <div class="about-container">
           <div class="img">
             <img
               class="fileInput"
               id="image3"
               onclick="chooseFile()"
-              src=""
+              src="https://www.kokilabenhospital.com/blog/wp-content/uploads/2023/06/World-Blood-Donor-Day-Blog-.jpg"
               alt=""
             />
           </div>
           <div class="text">
-            <p>
+            <p contenteditable="true" class="editable" data-max-chars="600">
               Have you at anytime witnessed a relative of yours or a close
               friend searching frantically for a blood donor, when blood banks
               say out of stock, the donors in mind are out of reach and the time
@@ -681,12 +807,14 @@
               something that we as a society can do nothing to prevent? This
               thought laid our foundation.
             </p>
-            <p>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="600">
               "We Care" is an organization that brings voluntary blood donors
               and those in need of blood on to a common platform. Through this
               website, we seek donors who are willing to donate blood, as well
               as provide the timeliest support to those in frantic need of it.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
         </div>
       </section>
@@ -695,73 +823,110 @@
     <hr id="services" />
     <!---- Services Section ------>
     <div id="3">
-      <section class="services">
-        <h2 class="heading">Our Services</h2>
+      <section class="services" id="services">
+        <h2 class="heading editable" contenteditable="true" data-max-chars="30">
+          Our Services
+        </h2>
+        <div class="charCount" style="display: none"></div>
         <div class="service-container">
           <div class="box">
             <i class="fas fa-bone"></i>
-            <h3>What we do</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              What we do
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We Care connect blood donors with recipients, without any
               intermediary such as blood banks, for an efficient and seamless
               process.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-user-graduate"></i>
-            <h3>Innovative</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Innovative
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We Care is an innovative approach to address global health. We
               provide immediate access to blood donors.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-child"></i>
-            <h3>Network</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Network
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We Care is one of several community organizations working together
               as a network that responds to emergencies in an efficient manner.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-hand-holding-usd"></i>
-            <h3>Get notified</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Get notified
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We Care works with network partners to connect blood donors and
               recipients through an automated SMS service and a mobile app.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-hands-helping"></i>
-            <h3>Totally Free</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Totally Free
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We Care's ultimate goal is to provide an easy-to-use,
               easy-to-access, fast, efficient, and reliable way to get
               life-saving blood, totally Free of cost.
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-people-carry"></i>
-            <h3>Save Life</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Save Life
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We are a non profit foundation and our main objective is to make
               sure that everything is done to protect vulnerable persons. Help
               us by making a gift !
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-hand-holding-water"></i>
-            <h3>Alaways Available</h3>
-            <p>We Care gives you 24x7 Service that too Free Of Cost</p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              Alaways Available
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
+              We Care gives you 24x7 Service that too Free Of Cost
+            </p>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="box">
             <i class="fas fa-hand-holding-medical"></i>
-            <h3>MEDICAL FACILITIES</h3>
-            <p>
+            <h3 contenteditable="true" class="editable" data-max-chars="30">
+              MEDICAL FACILITIES
+            </h3>
+            <div class="charCount" style="display: none"></div>
+            <p class="editable" contenteditable="true" data-max-chars="250">
               We provide free of cost medical services to needy people and
               provide treatment faciliries and rehabilation centers are also
               there
             </p>
+            <div class="charCount" style="display: none"></div>
           </div>
         </div>
       </section>
@@ -770,8 +935,11 @@
     <hr id="gallery" />
     <!---- Gallery Section ------>
     <div id="4">
-      <section class="gallary-img">
-        <h1 class="heading">Our Gallary</h1>
+      <section class="gallery-img" id="gallery">
+        <h1 class="heading editable" contenteditable="true" data-max-chars="30">
+          Our Gallary
+        </h1>
+        <div class="charCount" style="display: none"></div>
         <div class="gbox">
           <div class="gallery">
             <div class="imgContainer">
@@ -780,12 +948,19 @@
                   onclick="chooseFile()"
                   class="fileInput"
                   id="image4"
-                  src=""
+                  src="https://media.slidesgo.com/storage/11986348/blood-bank-center1633685952.jpg"
                   alt="image name"
                 />
               </div>
             </div>
-            <div class="desc">Donation camp 1</div>
+            <div
+              class="desc editable"
+              contenteditable="true"
+              data-max-chars="100"
+            >
+              Donation camp 1
+            </div>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="gallery">
             <div class="imgContainer">
@@ -799,7 +974,14 @@
                 />
               </div>
             </div>
-            <div class="desc">Donation camp 2</div>
+            <div
+              class="desc editable"
+              contenteditable="true"
+              data-max-chars="100"
+            >
+              Donation camp 2
+            </div>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="gallery">
             <div class="imgContainer">
@@ -813,7 +995,14 @@
                 />
               </div>
             </div>
-            <div class="desc">Donation camp 3</div>
+            <div
+              class="desc editable"
+              contenteditable="true"
+              data-max-chars="100"
+            >
+              Donation camp 3
+            </div>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="gallery">
             <div class="imgContainer">
@@ -827,7 +1016,14 @@
                 />
               </div>
             </div>
-            <div class="desc">Blood Donation Campaign</div>
+            <div
+              class="desc editable"
+              contenteditable="true"
+              data-max-chars="100"
+            >
+              Donation camp 4
+            </div>
+            <div class="charCount" style="display: none"></div>
           </div>
           <div class="gallery">
             <div class="imgContainer">
@@ -841,7 +1037,14 @@
                 />
               </div>
             </div>
-            <div class="desc">Our team in Nigeria helping children</div>
+            <div
+              class="desc editable"
+              contenteditable="true"
+              data-max-chars="100"
+            >
+              Donation camp 5
+            </div>
+            <div class="charCount" style="display: none"></div>
           </div>
         </div>
       </section>
@@ -850,83 +1053,121 @@
     <hr id="contact" />
     <!---- Contact Us Section ------>
     <div id="5">
-      <section class="contact">
-        <h1>Contact Us</h1>
-        <form action="#" method="POST">
-          <div class="input-wrap">
-            <input
-              type="text"
-              placeholder="Your Name"
-              name="name"
-              required=""
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              name="email"
-              required=""
-            />
+      <section class="contact" id="contact">
+        <h1 class="heading editable" contenteditable="true" data-max-chars="30">
+          Contact Us
+        </h1>
+        <div class="charCount" style="display: none"></div>
+        <div class="container_contact">
+          <div class="content">
+            <div class="contact-side">
+              <div class="address details">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="topic">Address</div>
+                <div class="text">
+                  <div
+                    class="text-one editable"
+                    contenteditable="true"
+                    data-max-chars="100"
+                  >
+                    ahmedabad, 380052
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                  <div
+                    class="text-two editable"
+                    contenteditable="true"
+                    data-max-chars="100"
+                  >
+                    ahmedabad 360002
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                </div>
+              </div>
+              <div class="phone details">
+                <i class="fas fa-phone-alt"></i>
+                <div class="topic">Phone</div>
+                <div class="text">
+                  <div
+                    class="text-one editable"
+                    contenteditable="true"
+                    data-max-chars="15"
+                  >
+                    +91758964153
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                  <div
+                    class="text-two editable"
+                    contenteditable="true"
+                    data-max-chars="15"
+                  >
+                    +918569314785
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                </div>
+              </div>
+              <div class="email details">
+                <i class="fas fa-envelope"></i>
+                <div class="topic">Email</div>
+                <div class="text">
+                  <div
+                    class="text-one editable"
+                    contenteditable="true"
+                    data-max-chars="60"
+                  >
+                    blooddonateahmedabad@gmail.com
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                  <div
+                    class="text-two editable"
+                    contenteditable="true"
+                    data-max-chars="60"
+                  >
+                    blooddonationssurat@gmail.com
+                  </div>
+                  <div class="charCount" style="display: none"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="input-wrap-2">
-            <input
-              type="text"
-              placeholder="Your Subject...."
-              name="subject"
-              required=""
-            />
-            <textarea
-              name="msg"
-              id=""
-              cols="30"
-              rows="10"
-              placeholder="Your Message"
-              required=""
-            ></textarea>
-          </div>
-          <div class="btn"><button type="submit">Send Message</button></div>
-        </form>
+        </div>
       </section>
     </div>
     <!---- Contact Us Section End ------>
     <hr id="team" />
     <!---- Teams Section ------>
     <div id="6">
-      <section class="section-team">
-        <h1 class="heading">Our Team</h1>
+      <section class="section-team" id="team">
+        <h1 class="heading editable" contenteditable="true" data-max-chars="30">
+          Our Team
+        </h1>
+        <div class="charCount" style="display: none"></div>
         <div class="container">
-          <div class="card">
+          <div class="card" contenteditable="false">
             <div class="imgbox">
               <img
                 class="fileInput"
-                id="image13"
+                id="image9"
                 onclick="chooseFile()"
-                src=""
+                src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg"
                 alt="image"
               />
             </div>
             <div class="content">
-              <div class="details">
-                <h2>Saurabh Pandey<br /><span>xyz</span></h2>
-                <ul class="social">
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-twitter"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"><i class="fab fa-github"></i></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-instagram"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-linkedin-in"></i
-                    ></a>
-                  </li>
-                </ul>
+              <div class="details" contenteditable="false">
+                <h2 contenteditable="true" class="editable" data-max-chars="30">
+                  Sarvesh patel
+                </h2>
+                <div class="charCount" style="display: none"></div>
+                <!-- <br /> -->
+                <h2>
+                  <span
+                    contenteditable="true"
+                    class="editable"
+                    data-max-chars="30"
+                    >CEO</span
+                  >
+                  <div class="charCount" style="display: none"></div>
+                </h2>
               </div>
             </div>
           </div>
@@ -935,34 +1176,27 @@
               <img
                 onclick="chooseFile()"
                 class="fileInput"
-                id="image14"
-                src="./assets/images/team_members/shruti.jpg"
+                id="image10"
+                src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg"
                 alt="image"
               />
             </div>
             <div class="content">
-              <div class="details">
-                <h2>Shruti Shreya<br /><span>xyz</span></h2>
-                <ul class="social">
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-twitter"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"><i class="fab fa-github"></i></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-instagram"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-linkedin-in"></i
-                    ></a>
-                  </li>
-                </ul>
+              <div class="details" contenteditable="false">
+                <h2 contenteditable="true" class="editable" data-max-chars="30">
+                  kumar sanu
+                </h2>
+                <div class="charCount" style="display: none"></div>
+                <!-- <br /> -->
+                <h2>
+                  <span
+                    contenteditable="true"
+                    class="editable"
+                    data-max-chars="30"
+                    >Founding partners</span
+                  >
+                  <div class="charCount" style="display: none"></div>
+                </h2>
               </div>
             </div>
           </div>
@@ -970,35 +1204,28 @@
             <div class="imgbox">
               <img
                 class="fileInput"
-                id="image15"
+                id="image11"
                 onclick="chooseFile()"
-                src=""
+                src="https://www.bareinternational.in/wp-content/uploads/sites/3/2018/02/AdobeStock_115483122.jpeg"
                 alt="image"
               />
             </div>
             <div class="content">
-              <div class="details">
-                <h2>Alok Kumar Jha<br /><span>xyz</span></h2>
-                <ul class="social">
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-twitter"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"><i class="fab fa-github"></i></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-instagram"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-linkedin-in"></i
-                    ></a>
-                  </li>
-                </ul>
+              <div class="details" contenteditable="false">
+                <h2 contenteditable="true" class="editable" data-max-chars="30">
+                  ram charan
+                </h2>
+                <div class="charCount" style="display: none"></div>
+                <!-- <br /> -->
+                <h2>
+                  <span
+                    contenteditable="true"
+                    class="editable"
+                    data-max-chars="30"
+                    >employee</span
+                  >
+                  <div class="charCount" style="display: none"></div>
+                </h2>
               </div>
             </div>
           </div>
@@ -1006,35 +1233,28 @@
             <div class="imgbox">
               <img
                 class="fileInput"
-                id="image16"
+                id="image12"
                 onclick="chooseFile()"
-                src=""
+                src="https://fixthephoto.com/blog/images/uikit_slider/male-photo-edited-by-fixthephoto_1649799183.jpg"
                 alt="image"
               />
             </div>
             <div class="content">
-              <div class="details">
-                <h2>Bhuvanyu Oliyan<br /><span>xyz</span></h2>
-                <ul class="social">
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-twitter"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"><i class="fab fa-github"></i></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-instagram"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a href="#" target="blank"
-                      ><i class="fab fa-linkedin-in"></i
-                    ></a>
-                  </li>
-                </ul>
+              <div class="details" contenteditable="false">
+                <h2 contenteditable="true" class="editable" data-max-chars="30">
+                  kishore kumar
+                </h2>
+                <div class="charCount" style="display: none"></div>
+                <!-- <br /> -->
+                <h2>
+                  <span
+                    contenteditable="true"
+                    class="editable"
+                    data-max-chars="30"
+                    >wmployee</span
+                  >
+                  <div class="charCount" style="display: none"></div>
+                </h2>
               </div>
             </div>
           </div>
@@ -1045,29 +1265,26 @@
     <!------------- Footer ------------->
     <footer>
       <div class="footer-content">
-        <h1 class="heading">We Care</h1>
-        <p>We are ready to help you anytime because <b>we care..</b></p>
-        <ul class="solink">
-          <li>
-            <a href="#" target="blank"><i class="fab fa-twitter"></i></a>
-          </li>
-          <li>
-            <a href="#" target="blank"><i class="fab fa-github"></i></a>
-          </li>
-          <li>
-            <a href="#" target="blank"><i class="fab fa-instagram"></i></a>
-          </li>
-          <li>
-            <a href="#" target="blank"><i class="fab fa-linkedin-in"></i></a>
-          </li>
-        </ul>
+        <h1 class="heading editable" contenteditable="true" data-max-chars="20">
+          We Care
+        </h1>
+        <div class="charCount" style="display: none"></div>
+        <p contenteditable="true" class="editable" data-max-chars="150">
+          We are ready to help you anytime because
+          <b contenteditable="true">we care..</b>
+        </p>
+        <div class="charCount" style="display: none"></div>
       </div>
-      <div class="footer-bottom">
-        <p>Copyright © 2021 We Care. Designed by <span>Neel Shah</span></p>
+      <div class="footer-bottom" contenteditable="false">
+        <p contenteditable="true" class="editable" data-max-chars="100">
+          Copyright © 2021 We Care. Designed by
+          <span contenteditable="false">WDA</span>
+        </p>
+        <div class="charCount" style="display: none"></div>
       </div>
     </footer>
     <!------------- Footer End ------------->
-    <script>
+    <script id="imgMapping">
       function onImageTap(imgId) {
         AndroidInterface.onImageTap(imgId);
       }
@@ -1075,9 +1292,21 @@
         const imgdata = JSON.parse(data);
         const img = document.getElementById(imgdata.id);
         if (img) {
-          img.src = "http://10.201.251.150:8000/" + imgdata.url;
+          img.src = "http://${ipaddress}/" + imgdata.url;
         }
       }
+    </script>
+    <script id="navToggle">
+      document.getElementById("tbox").addEventListener("click", function () {
+        document.getElementById("nav-list").classList.toggle("active");
+        document.getElementById("toogle").classList.toggle("active");
+      });
+    </script>
+    <!-- script for charcount / character limit track and preventing user to add images in editable   -->
+    <!-- <script id="charCount">    const editableElements = document.querySelectorAll('.editable');    const charCount = document.getElementById('charCount');    let focusedEditable = null; // Track the currently focused editable element    editableElements.forEach(function (editable, index) {      const maxChars = parseInt(editable.getAttribute('data-max-chars'));      editable.addEventListener('focus', function () {        focusedEditable = this;        charCount.style.display = 'block';        updateCharCount();      });       // Prevent user from pasting images    editable.addEventListener('paste', function (event) {      event.preventDefault(); // Prevent the default paste action      alert('Pasting images is not allowed.');    });    // Prevent user from dragging and dropping images    editable.addEventListener('drop', function (event) {      event.preventDefault(); // Prevent the default drop action      alert('Dragging and dropping images is not allowed.');    });    // Event listener for when an 'editable' element loses focus      editable.addEventListener('blur', function () {        focusedEditable = null;        charCount.style.display = 'none';      });      // Event listener for keydown to enforce character limit      editable.addEventListener('keydown', function (event) {        const currentText = this.textContent;        const remainingChars = maxChars - currentText.length;        if (currentText.length >= maxChars && event.key !== 'Backspace') {          event.preventDefault(); // Prevent typing more characters        }              });      // Event listener for input to update character count      editable.addEventListener('input', function (event) {        let currentText = this.textContent;        const remainingChars = maxChars - currentText.length;        if (remainingChars < 0) {          // Truncate text to match the character limit          currentText = currentText.substring(0, maxChars);          this.textContent = currentText;        }        updateCharCount(); // Update character count display      });    });    // Function to update the character count display    function updateCharCount() {      if (focusedEditable) {        const maxChars = parseInt(focusedEditable.getAttribute('data-max-chars'));        const currentText = focusedEditable.textContent;        const remainingChars = maxChars - currentText.length;        // Update the character count display with the current and remaining characters        charCount.textContent = `Total chars: ${currentText.length} (${remainingChars} remaining)`;      }    }      </script> -->
+    <script id="charCount2">
+      const editableElements = document.querySelectorAll(".editable");
+      let focusedEditable = null; // Track the currently focused editable element      editableElements.forEach(function (editable, index) {        const maxChars = parseInt(editable.getAttribute("data-max-chars"));        // Create a character count element for each editable element        const charCount = document.createElement("div");        charCount.className = "charCount";        charCount.style.display = "none"; // Initially hide it        editable.insertAdjacentElement("afterend", charCount);        editable.addEventListener("focus", function () {          focusedEditable = this;          charCount.style.display = "block";          updateCharCount(this, charCount);        });        editable.addEventListener("paste", function (event) {          // Access clipboard data          const clipboardData = event.clipboardData || window.clipboardData;          const pastedText = clipboardData.getData("text/plain");          // Check if pasted content is plain text          if (!pastedText) {            event.preventDefault();            alert("Pasting images is not allowed.");          }        });        editable.addEventListener("drop", function (event) {          event.preventDefault();          alert(            "Dragging and dropping is not allowed. Only plain text is allowed."          );        });        editable.addEventListener("blur", function () {          focusedEditable = null;          charCount.style.display = "none";        });        editable.addEventListener("keydown", function (event) {          const currentText = this.textContent;          const remainingChars = maxChars - currentText.length;          if (            currentText.length >= maxChars &&            event.key !== "Backspace" &&            event.key !== "ArrowLeft" &&            event.key !== "ArrowRight"          ) {            event.preventDefault();          }        });        editable.addEventListener("input", function () {          let currentText = this.textContent;          const remainingChars = maxChars - currentText.length;          if (remainingChars < 0) {            currentText = currentText.substring(0, maxChars);            this.textContent = currentText;            // alert("you reached the limit")          }          updateCharCount(this, charCount);        });      });      // Function to update the character count display      function updateCharCount(editable, charCount) {        const maxChars = parseInt(editable.getAttribute("data-max-chars"));        const currentText = editable.textContent;        const remainingChars = maxChars - currentText.length;        charCount.style.display = "block";        // charCount.style.paddingInline = '1px';        charCount.style.margin = "5px";        charCount.style.bottom = "5px";        charCount.style.position = "relative";        charCount.style.float = "right";        // editable.style.position= 'relative'        charCount.textContent =          " " + currentText.length + " / " + remainingChars + " ";      }      if (remainingChars <= 0) {        // You can style the character count element or provide feedback to the user when the limit is reached        charCount.style.color = "red"; // For example, change the text color to red      } else {        charCount.style.color = ""; // Reset the text color when within the limit      }
     </script>
   </body>
 </html>
