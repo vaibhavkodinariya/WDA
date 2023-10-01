@@ -111,9 +111,29 @@ const getAllQueries = asyncHandler(async (req, res) => {
   res.send({ success: true, queries: result });
 });
 
+//@desc Update WebSite Status
+//@Route /wda/admin/updateWebSiteStatus
+//access Private
+const updateWebSiteStatus = asyncHandler(async (req, res) => {
+  const { webSiteId, status } = req.body;
+  const updateBywebSiteId = { webSiteId: webSiteId };
+  const update = {
+    $set: {
+      statusName: status,
+    },
+  };
+  const result = await User.updateOne(updateBywebSiteId, update);
+  if (result) {
+    return res.send({ success: true, message: "Status Changed" });
+  } else {
+    return res.send({ success: false, message: "SomeThing Went Wrong" });
+  }
+});
+
 module.exports = {
   getWebSiteStatusByNumber,
   getQueriesBySearch,
   getDetailsBySearch,
   getAllQueries,
+  updateWebSiteStatus,
 };
