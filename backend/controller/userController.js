@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const storage = require("node-persist");
 const Website = require("../models/websiteModel");
+const Query = require("../models/queryModel");
 
 const delay = 2 * 60 * 1000;
 const client = require("twilio")(
@@ -258,6 +259,31 @@ const getUserWebsites = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Raise Query
+//@Route /api/raiseQuery
+//access Private
+const raiseQuery = asyncHandler(async (req, res) => {
+  const { description, webSiteId, userId } = req.body;
+  if (!description || !webSiteId || !userId) {
+    return res.send({
+      success: false,
+      message: "Please Enter Appropriate Data",
+    });
+  } else {
+    const isRaised = await Query.create({
+      description: description,
+      webSiteId: webSiteId,
+      userId: userId,
+      date: new Date(),
+    });
+    if (isRaised) {
+      return res.send({ success: true, message: "Query Raised" });
+    } else {
+      return res.send({ success: false, message: "SomeThing Went Wrong" });
+    }
+  }
+});
+
 module.exports = {
   userLogin,
   sendOtp,
@@ -266,4 +292,5 @@ module.exports = {
   updateUserProfile,
   getUserProfile,
   getUserWebsites,
+  raiseQuery,
 };

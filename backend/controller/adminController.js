@@ -61,6 +61,9 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Get Queries By Number
+//@Route /wda/admin/getQueriesBySearch/:contactNo
+//access Private
 const getQueriesBySearch = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
   if (!contactNo) {

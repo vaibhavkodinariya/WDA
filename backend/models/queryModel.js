@@ -12,7 +12,7 @@ const querySchema = mongoose.Schema({
     ref: "user",
     required: [true, "user Required"],
   },
-  date: { type: new Date(), required: [true, "Date Required"] },
+  date: { type: Date, required: [true, "Date Required"] },
 });
 
 module.exports = mongoose.model("query", querySchema);
