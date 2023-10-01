@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Status = require("../models/statusModel");
 const User = require("../models/userModel");
 const Website = require("../models/websiteModel");
+const Query = require("../models/queryModel");
 
 //@desc Get Website Status By Number
 //@Route /wda/admin/webSiteStatus/:contactNo
@@ -88,6 +89,7 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
     res.send({ success: true, queries: result[0]["queries"] });
   }
 });
+
 //@desc Get Queries By Number
 //@Route /wda/admin/getDetailsBySearch/:contactNo
 //access Private
@@ -100,8 +102,18 @@ const getDetailsBySearch = asyncHandler(async (req, res) => {
     res.send({ success: true, details: result });
   }
 });
+
+//@desc Get All Users Queries
+//@Route /wda/admin/getAllQueries
+//access Private
+const getAllQueries = asyncHandler(async (req, res) => {
+  const result = await Query.find();
+  res.send({ success: true, queries: result });
+});
+
 module.exports = {
   getWebSiteStatusByNumber,
   getQueriesBySearch,
   getDetailsBySearch,
+  getAllQueries,
 };
