@@ -130,10 +130,58 @@ const updateWebSiteStatus = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Get All Status
+//@Route /wda/admin/getAllStatus
+//access Private
+const getAllStatus = asyncHandler(async (req, res) => {
+  const result = await User.aggregate([
+    {
+      $lookup: {
+        from: "websites",
+        localField: "_id", // Field in the "User" collection
+        foreignField: "userId", // Field in the "website" collection
+        as: "websites",
+      },
+    },
+  ]);
+
+  const statusDetails = [];
+  for (data of result[0]["websites"]) {
+    var promise = await new Promise((resolve) => {
+      const status = Status.find({ webSiteId: data["_id"].toString() });
+      resolve(status);
+    });
+    statusDetails.push(promise[0]);
+  }
+
+  const mergedData = statusDetails.map((status) => {
+    const matchingWebsite = result[0]["websites"].find((website) =>
+      website._id.equals(status.webSiteId)
+    );
+    if (matchingWebsite) {
+      // console.log(status["_id"]);
+      return {
+        statusName: status["statusName"],
+        webSiteId: status["webSiteId"].toString(),
+        domainName: matchingWebsite.domainName,
+      };
+    } else {
+      return status;
+    }
+  });
+  res.send({
+    success: true,
+    Name: result[0]["Name"],
+    ContactNo: result[0]["ContactNo"],
+    statusData: mergedData,
+  });
+});
+
 module.exports = {
   getWebSiteStatusByNumber,
   getQueriesBySearch,
   getDetailsBySearch,
   getAllQueries,
   updateWebSiteStatus,
+  getAllStatus,
 };
