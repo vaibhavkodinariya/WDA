@@ -136,34 +136,43 @@ const websiteRegister = asyncHandler(async (req, res) => {
 //access Private
 const updateRegisteredWebsite = asyncHandler(async (req, res) => {
   const { updatedWebsiteCode, webSiteName } = req.body;
-  const newPath = path.dirname(__dirname);
+  if (!updatedWebsiteCode || !webSiteName) {
+    return res.send({ success: false, message: "Data Is Not Appropriate" });
+  } else {
+    const newPath = path.dirname(__dirname);
 
-  const webSiteNameToStore = webSiteName.replace(/\s+/g, "");
+    const webSiteNameToStore = webSiteName.replace(/\s+/g, "");
 
-  const folderpath = path.join(newPath, "businessWebsite");
+    const folderpath = path.join(newPath, "businessWebsite");
 
-  const htmlBuffer = Buffer.from(updatedWebsiteCode, "base64");
+    const htmlBuffer = Buffer.from(updatedWebsiteCode, "base64");
 
-  zlib.gunzip(htmlBuffer, (err, decompressedHtml) => {
-    if (err) {
-      console.error("Error decompressing HTML:", err);
-      return;
-    }
-    fs.unlinkSync(folderpath + `/ ` + `${webSiteNameToStore}.html`);
-    fs.writeFile(
-      folderpath + `/` + `${webSiteNameToStore}.html`,
-      decompressedHtml,
-      "utf8",
-      (writeErr) => {
-        if (writeErr) {
-          return res.send({
-            success: false,
-            message: "Error Updating Website",
-          });
-        }
+    zlib.gunzip(htmlBuffer, (err, decompressedHtml) => {
+      if (err) {
+        console.error("Error decompressing HTML:", err);
+        return;
       }
-    );
-  });
+      fs.unlinkSync(folderpath + `/ ` + `${webSiteNameToStore}.html`);
+      fs.writeFile(
+        folderpath + `/` + `${webSiteNameToStore}.html`,
+        decompressedHtml,
+        "utf8",
+        (writeErr) => {
+          if (writeErr) {
+            return res.send({
+              success: false,
+              message: "Error Updating Website",
+            });
+          } else {
+            return res.send({
+              success: true,
+              message: "Your Website Updated..",
+            });
+          }
+        }
+      );
+    });
+  }
 });
 
 module.exports = { addImages, websiteRegister, updateRegisteredWebsite };
