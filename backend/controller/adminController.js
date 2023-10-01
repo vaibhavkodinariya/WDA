@@ -78,14 +78,30 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
       },
       {
         $lookup: {
-          from: "query",
+          from: "queries",
           localField: "_id", // Field in the "User" collection
           foreignField: "userId", // Field in the "Query" collection
-          as: "websites",
+          as: "queries",
         },
       },
     ]);
-    res.send({ success: true, queries: result });
+    res.send({ success: true, queries: result[0]["queries"] });
   }
 });
-module.exports = { getWebSiteStatusByNumber, getQueriesBySearch };
+//@desc Get Queries By Number
+//@Route /wda/admin/getDetailsBySearch/:contactNo
+//access Private
+const getDetailsBySearch = asyncHandler(async (req, res) => {
+  const { contactNo } = req.params;
+  if (!contactNo) {
+    return res.send({ success: false, message: "Invalid User" });
+  } else {
+    const result = await User.findOne({ ContactNo: contactNo });
+    res.send({ success: true, details: result });
+  }
+});
+module.exports = {
+  getWebSiteStatusByNumber,
+  getQueriesBySearch,
+  getDetailsBySearch,
+};
