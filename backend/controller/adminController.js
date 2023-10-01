@@ -21,8 +21,8 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
       {
         $lookup: {
           from: "websites",
-          localField: "_id", // Field in the "orders" collection
-          foreignField: "userId", // Field in the "products" collection
+          localField: "_id", // Field in the "User" collection
+          foreignField: "userId", // Field in the "website" collection
           as: "websites",
         },
       },
@@ -61,4 +61,28 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getWebSiteStatusByNumber };
+const getQueriesBySearch = asyncHandler(async (req, res) => {
+  const { contactNo } = req.params;
+  if (!contactNo) {
+    return res.send({ success: false, message: "Invalid User" });
+  } else {
+    const condition = {
+      ContactNo: contactNo,
+    };
+    const result = await User.aggregate([
+      {
+        $match: condition,
+      },
+      {
+        $lookup: {
+          from: "query",
+          localField: "_id", // Field in the "User" collection
+          foreignField: "userId", // Field in the "Query" collection
+          as: "websites",
+        },
+      },
+    ]);
+    res.send({ success: true, queries: result });
+  }
+});
+module.exports = { getWebSiteStatusByNumber, getQueriesBySearch };
