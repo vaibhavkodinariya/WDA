@@ -149,7 +149,7 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
       console.error("Error decompressing HTML:", err);
       return;
     }
-
+    fs.unlinkSync(folderpath + `/ ` + `${webSiteNameToStore}.html`);
     fs.writeFile(
       folderpath + `/` + `${webSiteNameToStore}.html`,
       decompressedHtml,
@@ -165,4 +165,5 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
     );
   });
 });
+
 module.exports = { addImages, websiteRegister, updateRegisteredWebsite };

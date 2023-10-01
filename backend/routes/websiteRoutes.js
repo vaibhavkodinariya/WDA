@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post("/addImages", addImages);
 router.post("/websiteRegister", websiteRegister);
-router.post("/updateWebsite", updateRegisteredWebsite);
+router.put("/updateWebsite", updateRegisteredWebsite);
 
 module.exports = router;
