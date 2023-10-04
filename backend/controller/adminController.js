@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Status = require("../models/statusModel");
 const User = require("../models/userModel");
-const Website = require("../models/websiteModel");
 const Query = require("../models/queryModel");
+const Template = require("../models/templateModel");
 
 //@desc Get Website Status By Number
 //@Route /wda/admin/webSiteStatus/:contactNo
@@ -177,6 +177,14 @@ const getAllStatus = asyncHandler(async (req, res) => {
   });
 });
 
+//@desc Get All Templates
+//@Route /wda/admin/getAllTemplates
+//access Private
+const getAllTemplates = asyncHandler(async (req, res) => {
+  const templates = await Template.find();
+  res.json({ success: true, templates });
+});
+
 module.exports = {
   getWebSiteStatusByNumber,
   getQueriesBySearch,
@@ -184,4 +192,5 @@ module.exports = {
   getAllQueries,
   updateWebSiteStatus,
   getAllStatus,
+  getAllTemplates,
 };

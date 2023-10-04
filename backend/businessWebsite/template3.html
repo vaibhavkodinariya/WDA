@@ -1414,6 +1414,23 @@
       function onImageTap(imgId) {
         AndroidInterface.onImageTap(imgId);
       }
+      function getQueryParameters() {
+        var queryParams = window.location.search.substr(1).split("&");
+        var params = {};
+
+        queryParams.forEach(function (param) {
+          var paramParts = param.split("=");
+          var paramName = decodeURIComponent(paramParts[0]);
+          var paramValue = decodeURIComponent(paramParts[1]);
+          params[paramName] = paramValue;
+        });
+
+        return params;
+      }
+      var params = getQueryParameters();
+
+      var param1 = params.ipaddress;
+      alert(param1);
 
       function setImages(data) {
         const imgdata = JSON.parse(data);
