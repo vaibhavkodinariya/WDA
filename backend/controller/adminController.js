@@ -144,31 +144,83 @@ const getAllStatus = asyncHandler(async (req, res) => {
       },
     },
   ]);
-
-  var userData;
+  var webDetails;
+  var details;
   const statusDetails = [];
+  const userDetails = [];
   for (var i = 0; i < result.length; i++) {
     if (result[i]["websites"].length > 0) {
       for (var website of result[i]["websites"]) {
         const status = await Status.find({
           webSiteId: website["_id"].toString(),
         });
-        userData = {
-          Name: result[i]["Name"],
-          userId: result[i]["_id"].toString(),
-          contactNo: result[i]["ContactNo"],
-          websiteDomain: website["domainName"],
-          websiteType: website["websiteType"],
-          websiteStatus: status[0]["statusName"],
-        };
-        statusDetails.push(userData);
+        if (status.length > 0) {
+          for (var state of status) {
+            details = {
+              _id: result[i]["_id"].toString(),
+              Name: result[i]["Name"],
+              ContactNo: result[i]["ContactNo"],
+            };
+            webDetails = {
+              userId: website["userId"].toString(),
+              webSiteId: website["_id"].toString(),
+              webName: website["websiteName"],
+              domainName: website["domainName"],
+              statusName: state["statusName"],
+            };
+          }
+          statusDetails.push(webDetails);
+          userDetails.push(details);
+        }
       }
     }
   }
 
+  const combinedArray = [];
+
+  // Create a mapping of userId to objects in array1 for efficient lookup
+  const userIdToData1Mapping = {};
+  userDetails.forEach((item1) => {
+    if (!userIdToData1Mapping[item1._id]) {
+      userIdToData1Mapping[item1._id] = {
+        _id: item1._id,
+        Name: item1.Name,
+        ContactNo: item1.ContactNo,
+        website: [],
+      };
+    }
+  });
+
+  // Iterate through array2 and add objects to combinedArray
+  statusDetails.forEach((item2) => {
+    const data1Item = userIdToData1Mapping[item2.userId];
+    if (data1Item) {
+      data1Item.website.push({
+        userId: item2.userId,
+        webSiteId: item2.webSiteId,
+        webName: item2.webName,
+        domainName: item2.domainName,
+        statusName: item2.statusName,
+      });
+    }
+  });
+
+  // Convert the values of userIdToData1Mapping to an array
+  combinedArray.push(...Object.values(userIdToData1Mapping));
+
+  console.log(combinedArray);
+  // statusDetails.forEach((item1) => {
+  //   const matchingItem2 = userDetails.find(
+  //     (item2) => item1._id === item2.userId
+  //   );
+  //   if (matchingItem2) {
+  //     Object.assign(item1, matchingItem2);
+  //   }
+  // });
+
   res.send({
     success: true,
-    allStatusDetails: statusDetails,
+    allStatusDetails: combinedArray,
   });
 });
 
