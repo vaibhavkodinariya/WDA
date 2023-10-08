@@ -205,18 +205,7 @@ const getAllStatus = asyncHandler(async (req, res) => {
     }
   });
 
-  // Convert the values of userIdToData1Mapping to an array
   combinedArray.push(...Object.values(userIdToData1Mapping));
-
-  console.log(combinedArray);
-  // statusDetails.forEach((item1) => {
-  //   const matchingItem2 = userDetails.find(
-  //     (item2) => item1._id === item2.userId
-  //   );
-  //   if (matchingItem2) {
-  //     Object.assign(item1, matchingItem2);
-  //   }
-  // });
 
   res.send({
     success: true,
