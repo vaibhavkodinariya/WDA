@@ -145,35 +145,30 @@ const getAllStatus = asyncHandler(async (req, res) => {
     },
   ]);
 
+  var userData;
   const statusDetails = [];
-  for (data of result[0]["websites"]) {
-    var promise = await new Promise((resolve) => {
-      const status = Status.find({ webSiteId: data["_id"].toString() });
-      resolve(status);
-    });
-    statusDetails.push(promise[0]);
+  for (var i = 0; i < result.length; i++) {
+    if (result[i]["websites"].length > 0) {
+      for (var website of result[i]["websites"]) {
+        const status = await Status.find({
+          webSiteId: website["_id"].toString(),
+        });
+        userData = {
+          Name: result[i]["Name"],
+          userId: result[i]["_id"].toString(),
+          contactNo: result[i]["ContactNo"],
+          websiteDomain: website["domainName"],
+          websiteType: website["websiteType"],
+          websiteStatus: status[0]["statusName"],
+        };
+        statusDetails.push(userData);
+      }
+    }
   }
 
-  const mergedData = statusDetails.map((status) => {
-    const matchingWebsite = result[0]["websites"].find((website) =>
-      website._id.equals(status.webSiteId)
-    );
-    if (matchingWebsite) {
-      // console.log(status["_id"]);
-      return {
-        statusName: status["statusName"],
-        webSiteId: status["webSiteId"].toString(),
-        domainName: matchingWebsite.domainName,
-      };
-    } else {
-      return status;
-    }
-  });
   res.send({
     success: true,
-    Name: result[0]["Name"],
-    ContactNo: result[0]["ContactNo"],
-    statusData: mergedData,
+    allStatusDetails: statusDetails,
   });
 });
 
