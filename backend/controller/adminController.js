@@ -37,17 +37,16 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
       });
       statusDetails.push(promise[0]);
     }
-
     const mergedData = statusDetails.map((status) => {
       const matchingWebsite = result[0]["websites"].find((website) =>
         website._id.equals(status.webSiteId)
       );
       if (matchingWebsite) {
-        // console.log(status["_id"]);
         return {
           statusName: status["statusName"],
           webSiteId: status["webSiteId"].toString(),
           domainName: matchingWebsite.domainName,
+          type: matchingWebsite.websiteType,
         };
       } else {
         return status;
@@ -55,6 +54,7 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
     });
     res.send({
       success: true,
+      id: result[0]["_id"],
       Name: result[0]["Name"],
       ContactNo: result[0]["ContactNo"],
       statusData: mergedData,
@@ -86,7 +86,12 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
         },
       },
     ]);
-    res.send({ success: true, queries: result[0]["queries"] });
+    res.send({
+      success: true,
+      Name: result[0]["Name"],
+      contactNo: result[0]["ContactNo"],
+      queries: result[0]["queries"],
+    });
   }
 });
 
@@ -122,6 +127,7 @@ const getAllQueries = asyncHandler(async (req, res) => {
   for (var details of result) {
     if (details["queries"].length > 0) {
       var queriesDetails = {
+        id: details["_id"],
         name: details["Name"],
         contactNo: details["ContactNo"],
       };
@@ -137,13 +143,14 @@ const getAllQueries = asyncHandler(async (req, res) => {
 //access Private
 const updateWebSiteStatus = asyncHandler(async (req, res) => {
   const { webSiteId, status } = req.body;
+  console.log(req.body);
   const updateBywebSiteId = { webSiteId: webSiteId };
   const update = {
     $set: {
       statusName: status,
     },
   };
-  const result = await User.updateOne(updateBywebSiteId, update);
+  const result = await Status.updateOne(updateBywebSiteId, update);
   if (result) {
     return res.send({ success: true, message: "Status Changed" });
   } else {
