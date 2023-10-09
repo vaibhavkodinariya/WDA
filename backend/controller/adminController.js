@@ -107,8 +107,29 @@ const getDetailsBySearch = asyncHandler(async (req, res) => {
 //@Route /wda/admin/getAllQueries
 //access Private
 const getAllQueries = asyncHandler(async (req, res) => {
-  const result = await Query.find();
-  res.send({ success: true, queries: result });
+  // const result = await Query.find();
+  const result = await User.aggregate([
+    {
+      $lookup: {
+        from: "queries",
+        localField: "_id", // Field in the "User" collection
+        foreignField: "userId", // Field in the "Query" collection
+        as: "queries",
+      },
+    },
+  ]);
+  const infodetails = [];
+  for (var details of result) {
+    if (details["queries"].length > 0) {
+      var queriesDetails = {
+        name: details["Name"],
+        contactNo: details["ContactNo"],
+      };
+      infodetails.push(queriesDetails);
+    }
+  }
+
+  res.send({ success: true, info: infodetails });
 });
 
 //@desc Update WebSite Status
@@ -164,6 +185,7 @@ const getAllStatus = asyncHandler(async (req, res) => {
             webDetails = {
               userId: website["userId"].toString(),
               webSiteId: website["_id"].toString(),
+              websiteType: website["websiteType"],
               webName: website["websiteName"],
               domainName: website["domainName"],
               statusName: state["statusName"],
@@ -198,6 +220,7 @@ const getAllStatus = asyncHandler(async (req, res) => {
       data1Item.website.push({
         userId: item2.userId,
         webSiteId: item2.webSiteId,
+        websiteType: item2.websiteType,
         webName: item2.webName,
         domainName: item2.domainName,
         statusName: item2.statusName,
