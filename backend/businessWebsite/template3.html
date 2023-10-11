@@ -813,7 +813,7 @@
       line-break: normal;
     }
   </style>
-  <body>
+  <body id="body">
     <!---- Navigation ------>
     <header>
       <div class="tbox" id="tbox">
@@ -1427,17 +1427,15 @@
 
         return params;
       }
+
       var params = getQueryParameters();
-
       var param1 = params.ipaddress;
-      alert(param1);
-
       function setImages(data) {
         const imgdata = JSON.parse(data);
         const img = document.getElementById(imgdata.id);
 
         if (img) {
-          img.src = "http://172.16.12.5:8000/" + imgdata.url;
+          img.src = `http://${param1}/` + imgdata.url + `?` + Date.now();
         }
       }
     </script>
