@@ -31,6 +31,7 @@ const userLogin = asyncHandler(async (req, res) => {
     if (type == "Admin") {
       res.send({
         success: true,
+        userId: userdata._id,
       });
     } else {
       res.send({

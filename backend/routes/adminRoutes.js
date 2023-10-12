@@ -11,7 +11,7 @@ const {
 
 const router = express.Router();
 
-router.get("/webSiteStatus/:contactNo?", getWebSiteStatusByNumber);
+router.get("/webSiteStatus/:contactNo", getWebSiteStatusByNumber);
 router.get("/getQueriesBySearch/:contactNo", getQueriesBySearch);
 router.get("/getDetailsBySearch/:contactNo", getDetailsBySearch);
 router.get("/getAllQueries", getAllQueries);
