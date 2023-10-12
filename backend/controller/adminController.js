@@ -3,6 +3,7 @@ const Status = require("../models/statusModel");
 const User = require("../models/userModel");
 const Query = require("../models/queryModel");
 const Template = require("../models/templateModel");
+const Website = require("../models/websiteModel");
 
 //@desc Get Website Status By Number
 //@Route /wda/admin/webSiteStatus/:contactNo
@@ -45,6 +46,7 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
         return {
           statusName: status["statusName"],
           webSiteId: status["webSiteId"].toString(),
+          websiteName: matchingWebsite.websiteName,
           domainName: matchingWebsite.domainName,
           type: matchingWebsite.websiteType,
         };
@@ -86,12 +88,31 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
         },
       },
     ]);
-    res.send({
-      success: true,
-      Name: result[0]["Name"],
-      contactNo: result[0]["ContactNo"],
-      queries: result[0]["queries"],
-    });
+    try {
+      var queriesList = [];
+      for (var queries of result[0]["queries"]) {
+        const webSiteId = queries["webSiteId"].toString();
+        const queriesDetails = await Website.find({
+          _id: webSiteId,
+        });
+        // console.log(queriesDetails);
+        const queryStructure = {
+          description: queries["description"],
+          webId: webSiteId,
+          webName: queriesDetails[0]["websiteName"],
+          date: queries["date"],
+        };
+        queriesList.push(queryStructure);
+      }
+      // console.log(queriesDetails);
+      res.send({
+        success: true,
+        queriesData: queriesList,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    // console.log(result[0]["queries"]);
   }
 });
 
