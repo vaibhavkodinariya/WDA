@@ -107,12 +107,13 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
       // console.log(queriesDetails);
       res.send({
         success: true,
-        queriesData: queriesList,
+        Name: result[0]["Name"],
+        ContactNo: result[0]["ContactNo"],
+        queries: queriesList,
       });
     } catch (e) {
       console.log(e);
     }
-    // console.log(result[0]["queries"]);
   }
 });
 
