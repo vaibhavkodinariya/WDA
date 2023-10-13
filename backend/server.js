@@ -14,6 +14,7 @@ app.use(cors());
 
 app.use("/wda", express.static("businessWebsite"));
 app.use("/wda/templates", express.static("businessTemplates"));
+app.use("/wda/templatesImages", express.static("templateImages"));
 app.use("/wda/Images", express.static("businessImages"));
 app.use("/wda/userProfile", express.static("userProfile"));
 app.use("/wda/user", require("./routes/userRoutes"));
