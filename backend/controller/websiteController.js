@@ -179,4 +179,13 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addImages, websiteRegister, updateRegisteredWebsite };
+const uploadTemplateDetails = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  res.send({ success: true });
+});
+module.exports = {
+  addImages,
+  websiteRegister,
+  updateRegisteredWebsite,
+  uploadTemplateDetails,
+};

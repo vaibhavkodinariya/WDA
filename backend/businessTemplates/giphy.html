@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khathiyawadi PG</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet">
+    <script>
+        function chooseFile() {
+             AndroidInterface.showFileChooser(event.target.id);
+        }
+        function yourFileUploadHandler(filePaths) {
+              console.log(filePaths);
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <style>
+         * {
+            box-sizing: border-box;
+        }
+        /* Set background color and font styles */
+        
+        body {
+        margin: 0px;
+        font:normal 16px;
+        font-family: "Quicksand";
+        }
+
+        /* Reset some default styles */
+               
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+        
+        
+        
+        h1 {
+            font-size: 24px;
+        }
+        
+        /* Navigation styles */
+        
+        .nav {
+        height: 50px;
+        width: 100%;
+        background-color:brown;
+        position: relative;
+        }
+
+        .nav > .nav-header {
+        display: inline;
+        }
+
+        .nav > .nav-header > .nav-title {
+        display: inline-block;
+        font-size: 22px;
+        color: #fff;
+        padding: 10px 10px 10px 10px;
+        }
+
+        .nav > .nav-btn {
+        display: none;
+        }
+
+        .nav > .nav-links {
+        display: inline;
+        float: right;
+        font-size: 18px;
+        }
+
+        .nav > .nav-links > a {
+        display: inline-block;
+        padding: 13px 10px 13px 10px;
+        text-decoration: none;
+        color: #efefef;
+        }
+
+        .nav > .nav-links > a:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav > #nav-check {
+        display: none;
+        }
+        @media (max-width: 600px) {
+            .nav > .nav-btn {
+                display: inline-block;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+            }
+            .nav > .nav-btn > label {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                padding: 13px;
+            }
+            .nav > .nav-btn > label:hover,.nav  #nav-check:checked ~ .nav-btn > label {
+                background-color: brown;
+            }
+            .nav > .nav-btn > label > span {
+                display: block;
+                width: 25px;
+                height: 10px;
+                border-top: 2px solid #eee;
+            }
+            .nav > .nav-links {
+                position: absolute;
+                display: block;
+                width: 100%;
+                background-color:brown;
+                height: 0px;
+                transition: all 0.3s ease-in;
+                overflow-y: hidden;
+                top: 50px;
+                left: 0px;
+            }
+            .nav > .nav-links > a {
+                display: block;
+                width: 100%;
+            }
+            .nav > #nav-check:not(:checked) ~ .nav-links {
+                height: 0px;
+            }
+            .nav > #nav-check:checked ~ .nav-links {
+                height: calc(100vh - 50px);
+                overflow-y: auto;
+            }
+        }
+        /* Main content styles */
+        .content {
+            max-width: 70%;   
+            margin: 20px auto;
+            padding: 20px;
+            /* background-color: #fff; */
+           
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        }
+        section.wrapper{
+            width:100%;
+            margin: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .wrapper{
+            width:90%;
+            margin:0 auto;
+        }
+      
+        .row{
+            margin:0;
+         }
+        .sec {
+            width:100%;
+            padding:6% 0;
+        }
+        .about{
+            padding:5% 0;
+            background:brown;
+            font:normal 42px Quicksand;
+            color:white;
+        }
+        .detail{
+            font-size: large;
+        }
+        .home-img{
+            margin-top :-4.2%;
+            height: 210px;
+            width:350px;
+            /* border-radius:250px; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            float:right;
+        }
+        
+        .home-img img{
+            max-width: 80%;
+            height: auto;
+            object-fit: cover;
+            margin: 2% 0;
+           
+            /* float: center; */
+            /* mix-blend-mode: color-burn; */
+            /* mix-blend-mode: multiply; */
+        }
+        
+        .big-hi{
+            font:bold 110% Quicksand;
+            color:#fff;
+            padding:10px 0;
+        } 
+
+        
+        .about-p {
+            line-height: 1.2;
+            padding: 0 15px;
+            text-align: -webkit-match-parent;
+        }
+        
+        @media (max-width: 600px) {
+            /* body{
+                overflow: hidden;
+            } */
+            section.wrapper {
+                flex-direction: column;
+                margin-top: 80px;
+                
+            }
+
+            .about-p,section.wrapper .home-img {
+                width: 100%;
+                margin-top: 50px;
+                text-align: -webkit-match-parent;
+            }
+        }
+        /* Section styles */
+        .section {
+            background-color:cornsilk;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section h2 {
+            margin-bottom: 10px;
+        }
+        
+        .section p {
+            line-height: 1.5;
+            padding: 0 15px;
+        }
+       
+
+
+    #portfolio{
+        background-color: #efefef;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .project-grid{
+        display: grid;
+        background-color: brown;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        /* width: 90%; */
+        max-width: 90%;
+        max-height: 90%;
+        grid-gap: 50px;
+        margin: auto;
+        align-items: center;
+        border-radius: 12px;
+        
+    }
+    .project-grid > a {
+        text-decoration: none;
+        color: black;
+        
+    }
+    .project-card{
+        margin: 25px;
+        background-color: #efefef;
+        border-radius: 15px;
+    }
+
+        
+    .project-thumbnail{
+        height: calc(100% - 6.8rem);
+        object-fit: cover;
+        width: 100%;
+        aspect-ratio: 6.5/4;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+    .project-description{
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60px;
+       
+        
+    }
+            
+   
+
+    @media (max-width: 600px){
+    
+        #portfolio{
+            height: 70%;
+            gap: 10px;
+            
+        }
+        .project-grid{
+            grid-template-columns: 1fr;
+            margin: 18px;
+        }
+}
+        
+            .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 15px;
+            }
+
+            .login-box {
+            width: 400px;
+            height: 50%;
+            padding: 20px;
+            background-color: brown;
+            border-radius: 1em;
+            box-shadow: 0 0 5px brown; 
+            color: #ffffff;
+            }
+
+            h1 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 1.5%;
+            font-size: 200%;
+            text-shadow: 0 0 5px #cacaca; 
+            }
+            h2{
+            margin-top: 18px;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 45px;
+            font-size: 90%;
+            }
+            .aboutProject{
+                font-family: 'Montserrat', sans-serif;
+                text-align: center;
+                margin-bottom: 3%;
+                font-size: 200%;
+                /* text-shadow: 0 0 5px #cacaca; */
+            }
+            p {
+            margin-top: 18px;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 45px;
+            font-size: 70%;
+            /* text-shadow: 0 0 5px #cacaca;  */
+            }
+
+            .form-group {
+            margin-bottom: 10px;
+            margin-top: 0px;
+            
+            }
+
+        /* Footer styles */
+        footer {
+            background-color: brown;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            margin-top: 15px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+            .aboutProject{
+                font-family: 'Montserrat', sans-serif;
+                text-align: center;
+                margin-bottom: 8%;
+                font-size: 200%;
+                /* text-shadow: 0 0 5px #cacaca; */
+            }
+           
+            nav a {
+                margin: 0 5px;
+            }
+        }
+    /* contact form style */
+        .container{
+            align-content: center;
+            justify-content: center;
+            border-radius: 6px;
+            
+        }
+        .container .content{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        }
+        .container .content .contact-side{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 15px;
+        position: relative;
+        }
+        .content .contact-side .details{
+        margin: 14px;
+        text-align: center;
+        }
+        .content .contact-side .details i{
+        font-size: 30px;
+        color:brown;
+        margin-bottom: 10px;
+        }
+        .content .contact-side .details .topic{
+        font-size: 18px;
+        font-weight: 500;
+        }
+        .content .contact-side .details .text-one,
+        .content .contact-side .details .text-two{
+        font-size: 14px;
+        color: #afafb6;
+        }
+
+        @media (max-width: 600px) {
+        .container{
+            margin: 40px 0;
+            height: 100%;
+        }
+        .container .content{
+            flex-direction: column-reverse;
+        }
+        .container .content .contact-side{
+        width: 100%;
+        flex-direction: row;
+        margin-top: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+        }
+        .container .content .contact-side::before{
+        display: none;
+        }
+        .container .content .right-side{
+        width: 100%;
+        margin-left: 0;
+        }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        
+        <div class="nav">
+            <input type="checkbox" id="nav-check">
+            <div class="nav-header">
+            <div class="nav-title" contenteditable="true">
+                Khathiyawadi PG
+            </div>
+            </div>
+            <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#rooms">Rooms</a>
+                <a href="#contact" >Contact</a>
+            </nav>    
+        </div>
+    </header>
+
+    <div class="section" id="1">
+        <section id="home">
+            <h1>Welcome To Your Own PG</h1>
+            <h2>Feels Like Home</h2>
+        </section>
+        
+        <div id="1">
+            <section id="about" class="row about sec">
+                <div class="wrapper">
+                <div class="home-img">
+                    <img src="https://s3.ap-south-1.amazonaws.com/www.cimg.in/images/2019/11/25/14/165613736_15746570961_large.jpeg" >
+
+                </div>
+
+                <div class="about-p">
+                    <span class="big-hi" contenteditable="true">We provide the best PG Facility</span><br/>
+                    <span contenteditable="true" class="detail">We have 2 PG till now and 1 in progress of starting. </span>
+                    <!-- <br/>I also design Logos which clearly define your Brand.
+                    <br/> -->
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <div id="2" contenteditable="true">
+            <section id="rooms">
+                <header>
+                    <h2 class="aboutProject" contenteditable="true">Here are your Luxurious Rooms</h2>
+                </header>
+                <div class="project-grid">
+                    <a href="#" target="_blank" class="project-card">
+                        <img src="https://girlspgkolkata.com/img/accommodations/3-Sharing/3-Sharing%20AC%20-%201.jpg" 
+                         id="image2"  onclick="chooseFile() "
+                        class="project-thumbnail fileInput">
+                        <p class="project-description" contenteditable="true">
+                            <!-- <span class="code">&lt;</span> -->
+                            3 Sharing
+                            <!-- <span class="code">&#47;&gt;</span> -->
+                        </p>
+                    </a>
+                    <a href="#" target="_blank" class="project-card">
+                        <img src="https://www.greenrooms.in/storage/uploads/thumb/800_400_WhatsApp%20Image%202021-10-211.jpeg"
+                         id="image3"  onclick="chooseFile()" class="project-thumbnail fileInput">
+                        <p class="project-description" contenteditable="true">
+                            <!-- <span class="code">&lt;</span> -->
+                            4 Sharing
+                            <!-- <span class="code">&#47;&gt;</span> -->
+                        </p>
+                    </a>
+                    <a href="#" target="_blank" class="project-card">
+                        <img src="https://res.cloudinary.com/stanza-living/image/upload/f_auto,q_auto,w_600/e_improve/e_sharpen:10/e_saturation:10/f_auto,q_auto/v1661329058/Website/CMS-Uploads/h3zpryfsqt3lbw5rbvd3.jpg" 
+                         id="image4"  onclick="chooseFile()"
+                        class="project-thumbnail fileInput">
+                        <p class="project-description"contenteditable="true">
+                            <!-- <span class="code">&lt;</span> -->
+                            Dining Area 
+                            <!-- <span class="code">&#47;&gt;</span> -->
+                        </p>
+                    </a>
+                </div>
+             </section>
+        </div>
+
+        <div id="3">
+            <section id="contact">
+
+                <div class="container">
+                    <div class="content">
+                      <div class="contact-side">
+                        <div class="address details">
+                          <i class="fas fa-map-marker-alt"></i>
+                          <div class="topic">Address</div>
+                          <div class="text-one" contenteditable="true">Mithakali Six Road</div>
+                          <div class="text-two" contenteditable="true">Near Bob Bank</div>
+                        </div>
+                        <div class="phone details">
+                          <i class="fas fa-phone-alt"></i>
+                          <div class="topic">Phone</div>
+                          <div class="text-one" contenteditable="true">+0099 3622 5210</div>
+                          <div class="text-two" contenteditable="true">+0099 5254 3521</div>
+                        </div>
+                        <div class="email details">
+                          <i class="fas fa-envelope"></i>
+                          <div class="topic">Email</div>
+                          <div class="text-one" contenteditable="true">kathiyawadipg@gmail.com</div>
+                          <div class="text-two" contenteditable="true">roomsatkathiyawadipg@gmail.com</div>
+                        </div>
+                      </div>
+                     
+                    </div>
+                  </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p contenteditable="true">&copy; 2023 My Website. All rights reserved. <br>Made by Khathiyawadi PG</p>
+    </footer>
+    
+    <script id="imgMapping">
+        function onImageTap(imgId) {
+            AndroidInterface.onImageTap(imgId);
+        }
+        
+        function setImages(data) {
+             const imgdata = JSON.parse(data);
+             const img = document.getElementById(imgdata.id);
+             
+             if(img){
+                img.src="http://${ipaddress}/"+imgdata.url;
+             }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .editable {
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 contenteditable="true" class="editable">MEDICAL FACILITIES</h3>
+    <script>
+      const maxChars = 28; // Adjust the character limit as needed
+
+      const editableElement = document.querySelector(".editable");
+
+      const savedText = localStorage.getItem("editableText");
+
+      if (savedText) {
+        editableElement.innerText = savedText;
+      }
+
+      editableElement.addEventListener("input", function () {
+        let content = this.innerText;
+
+        if (content.length > maxChars) {
+          alert("You Have Reached Your Limits");
+          content = content.substring(0, maxChars); // Truncate the content
+          this.innerText = content;
+          this.contentEditable = "false"; // Disable editing
+          localStorage.setItem("editableText", content);
+          window.location.reload();
+        } else {
+          this.contentEditable = "true"; // Enable editing
+          localStorage.setItem("editableText", content);
+        }
+      });
+    </script>
+  </body>
+</html>
