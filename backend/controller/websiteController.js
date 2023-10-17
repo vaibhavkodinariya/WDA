@@ -4,6 +4,7 @@ const path = require("path");
 const zlib = require("zlib");
 const Website = require("../models/websiteModel");
 const Template = require("../models/templateModel");
+const Status = require("../models/statusModel");
 
 //@desc Add Website Images
 //@Route /api/user/addImages
@@ -124,6 +125,8 @@ const websiteRegister = asyncHandler(async (req, res) => {
         userId: userId,
       });
       if (websiteRegisteration) {
+        const insertedId = websiteRegisteration.insertedId;
+        await Status.create({ statusName: "hosted", webSiteId: insertedId });
         return res.send({ success: true, message: "Website Registered" });
       } else {
         return res.send({ success: false, message: "Something Went Wrong" });
