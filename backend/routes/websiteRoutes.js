@@ -28,13 +28,10 @@ router.post("/addImages", addImages);
 router.post("/websiteRegister", websiteRegister);
 router.put("/updateWebsite", updateRegisteredWebsite);
 
-// router.post("/uploadTemplateDetails", uploadTemplateDetails);
 router.post(
   "/uploadTemplateDetails",
   upload.fields([{ name: "template" }, { name: "templateImage" }]),
-  (req, res) => {
-    res.send({ succes: true, message: "Files uploaded successfully" });
-  }
+  uploadTemplateDetails
 );
 
 module.exports = router;

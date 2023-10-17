@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib");
 const Website = require("../models/websiteModel");
+const Template = require("../models/templateModel");
 
 //@desc Add Website Images
 //@Route /api/user/addImages
@@ -132,7 +133,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
 });
 
 //@desc Update Website
-//@Route /api/user/updateWebsite
+//@Route /business/updateWebsite
 //access Private
 const updateRegisteredWebsite = asyncHandler(async (req, res) => {
   const { updatedWebsiteCode, webSiteName } = req.body;
@@ -179,9 +180,24 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Update Website
+//@Route /business/uploadTemplateDetails
+//access Private
 const uploadTemplateDetails = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  res.send({ success: true });
+  const uploadedFile1 = req.files["template"][0];
+  const htmlName = uploadedFile1.originalname;
+
+  const uploadedFile2 = req.files["templateImage"][0];
+  const gifName = uploadedFile2.originalname;
+  const templateInsert = await Template.insert({
+    templatePath: `/wda/templates/${htmlName}`,
+    imageName: gifName,
+  });
+  if (templateInsert) {
+    res.send({ succes: true, message: "Files uploaded successfully" });
+  } else {
+    res.send({ succes: false, message: "Something Went Wrong" });
+  }
 });
 module.exports = {
   addImages,
