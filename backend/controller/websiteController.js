@@ -189,9 +189,10 @@ const uploadTemplateDetails = asyncHandler(async (req, res) => {
 
   const uploadedFile2 = req.files["templateImage"][0];
   const gifName = uploadedFile2.originalname;
+  const { name, extension } = gifName.split(".");
   const templateInsert = await Template.create({
     templatePath: `/wda/templates/${htmlName}`,
-    imageName: gifName,
+    imageName: name,
   });
   if (templateInsert) {
     res.send({ succes: true, message: "Files uploaded successfully" });
