@@ -68,16 +68,11 @@ const websiteRegister = asyncHandler(async (req, res) => {
     goodsServiceTax,
     userId,
   } = req.body;
-  if (
-    !htmlFile ||
-    !webSiteName ||
-    !websiteType ||
-    !dateOfIncorporation ||
-    !corporateIdentificationNo ||
-    !taxDeductionAccNo ||
-    !goodsServiceTax ||
-    !userId
-  ) {
+  if (!htmlFile || !webSiteName || !websiteType || !userId) {
+    return res.send({
+      success: false,
+      message: "Please Give Appropriate Data",
+    });
   } else {
     let isActive = await Website.findOne({ websiteName: webSiteName });
     if (isActive) {
