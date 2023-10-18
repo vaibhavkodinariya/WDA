@@ -112,7 +112,7 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
         queries: queriesList,
       });
     } catch (e) {
-      console.log(e);
+      res.send({ success: false, message: "No Data Found" });
     }
   }
 });
