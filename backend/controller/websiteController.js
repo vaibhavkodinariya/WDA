@@ -116,7 +116,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
         corporateIdentificationNo: corporateIdentificationNo,
         taxDeductionAccNo: taxDeductionAccNo,
         goodsAndServicesTax: goodsServiceTax,
-        domainName: `http://localhost:8000/wda/${webSiteNameToStore}.html`,
+        domainName: `${webSiteNameToStore}.html`,
         userId: userId,
       });
       if (websiteRegisteration) {
