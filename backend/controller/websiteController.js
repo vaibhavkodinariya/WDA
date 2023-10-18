@@ -120,7 +120,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
         userId: userId,
       });
       if (websiteRegisteration) {
-        const insertedId = websiteRegisteration.insertedId;
+        const insertedId = websiteRegisteration._id;
         await Status.create({ statusName: "hosted", webSiteId: insertedId });
         return res.send({ success: true, message: "Website Registered" });
       } else {
