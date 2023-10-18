@@ -11,11 +11,9 @@ const websiteSchema = mongoose.Schema({
   },
   dateOfIncorporation: {
     type: String,
-    required: [true, "please enter password"],
   },
   corporateIdentificationNo: {
     type: String,
-    required: [true, "please enter Contact"],
   },
   taxDeductionAccNo: {
     type: String,
