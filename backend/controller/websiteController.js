@@ -125,7 +125,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
         return res.send({
           success: true,
           message: "Website Registered",
-          domainName: `${webSiteNameToStore}.html`,
+          domainName: webSiteName,
         });
       } else {
         return res.send({ success: false, message: "Something Went Wrong" });
