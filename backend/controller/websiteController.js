@@ -156,12 +156,12 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
         return;
       }
       fs.unlinkSync(
-        folderpath + `/ ` + `${webSiteNameToStore}.html`,
+        folderpath + `\\ ` + `${webSiteNameToStore}.html`,
         decompressedHtml,
         "utf8"
       );
       fs.writeFile(
-        folderpath + `/` + `${webSiteNameToStore}.html`,
+        folderpath + `\\` + `${webSiteNameToStore}.html`,
         decompressedHtml,
         "utf8",
         (writeErr) => {
