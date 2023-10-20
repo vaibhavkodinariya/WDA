@@ -99,37 +99,44 @@ const websiteRegister = asyncHandler(async (req, res) => {
           folderpath + `/` + `${webSiteNameToStore}.html`,
           decompressedHtml,
           "utf8",
-          (writeErr) => {
+          async (writeErr) => {
             if (writeErr) {
               return res.send({
                 success: false,
                 message: "Error Registering Website",
               });
+            } else {
+              const websiteRegisteration = await Website.create({
+                websiteName: webSiteName,
+                websiteType: websiteType,
+                dateOfIncorporation: dateOfIncorporation,
+                corporateIdentificationNo: corporateIdentificationNo,
+                taxDeductionAccNo: taxDeductionAccNo,
+                goodsAndServicesTax: goodsServiceTax,
+                domainName: `${webSiteNameToStore}.html`,
+                userId: userId,
+              });
+              if (websiteRegisteration) {
+                const insertedId = websiteRegisteration._id;
+                await Status.create({
+                  statusName: "hosted",
+                  webSiteId: insertedId,
+                });
+                return res.send({
+                  success: true,
+                  message: "Website Registered",
+                  domainName: webSiteName,
+                });
+              } else {
+                return res.send({
+                  success: false,
+                  message: "Something Went Wrong",
+                });
+              }
             }
           }
         );
       });
-      const websiteRegisteration = await Website.create({
-        websiteName: webSiteName,
-        websiteType: websiteType,
-        dateOfIncorporation: dateOfIncorporation,
-        corporateIdentificationNo: corporateIdentificationNo,
-        taxDeductionAccNo: taxDeductionAccNo,
-        goodsAndServicesTax: goodsServiceTax,
-        domainName: `${webSiteNameToStore}.html`,
-        userId: userId,
-      });
-      if (websiteRegisteration) {
-        const insertedId = websiteRegisteration._id;
-        await Status.create({ statusName: "hosted", webSiteId: insertedId });
-        return res.send({
-          success: true,
-          message: "Website Registered",
-          domainName: webSiteName,
-        });
-      } else {
-        return res.send({ success: false, message: "Something Went Wrong" });
-      }
     }
   }
 });
