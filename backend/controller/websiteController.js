@@ -156,7 +156,7 @@ const updateRegisteredWebsite = asyncHandler(async (req, res) => {
         return;
       }
       fs.unlinkSync(
-        folderpath + `\\ ` + `${webSiteNameToStore}.html`,
+        folderpath + `\\` + `${webSiteNameToStore}.html`,
         decompressedHtml,
         "utf8"
       );
