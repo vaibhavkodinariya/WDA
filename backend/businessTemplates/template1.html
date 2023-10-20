@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet">
+    <script>
+        function chooseFile() {
+            AndroidInterface.showFileChooser(event.target.id);
+        }
+        function yourFileUploadHandler(filePaths) {
+            console.log(filePaths);
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+        ::-webkit-scrollbar {
+    width: 0em;
+    /* Adjust the width as needed */
+  }
+  :root {
+    --primary-color: #fff;
+    --primary-variant-color:#00AF66;
+    --secondary-color:#00AF66; 
+    --secondary-variant-color:#efefef; 
+    --text-color:#222; 
+    --font-family: "Quicksand"; 
+    
+  }
+
+        /* Set background color and font styles */
+        [contenteditable="true"] {
+            /* outline: none; */
+            resize: none;
+            overflow: hidden;
+            border: #777 1px;
+            margin-block: 5px;
+        }
+
+        [contenteditable="true"]:empty:focus::before {
+            content: "Click to start typing";
+            color: #aaa;
+        }
+
+        [contenteditable="true"]:empty::before {
+            content: "";
+            /* Clear the message when the element is focused */
+        }
+
+        body {
+            margin: 0px;
+            font: normal 16px;
+            font-family: var(--font-family);
+            background-color: var(--primary-color);
+
+        }
+
+        /* Reset some default styles */
+
+        body,
+        h1,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+        h1 {
+            font-size: 24px;
+        }
+
+        /* Navigation styles */
+
+        .nav {
+            height: 50px;
+            width: 100%;
+            background-color: var(--primary-variant-color);
+            position: relative;
+        }
+
+        .nav>.nav-header {
+            display: inline;
+        }
+
+        .nav>.nav-header>.nav-title {
+            display: inline-block;
+            font-size: 22px;
+            color: var(--primary-color);
+            padding: 7px 10px 10px 10px;
+        }
+
+        .nav>.nav-btn {
+            display: none;
+        }
+
+        .nav>.nav-links {
+            display: inline;
+            float: right;
+            font-size: 18px;
+        }
+
+        .nav>.nav-links>a {
+            display: inline-block;
+            padding: 8px 10px 10px 10px;
+            text-decoration: none;
+            color: var(--secondary-variant-color);
+        }
+        .nav>#nav-check {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .nav>.nav-btn {
+                display: inline-block;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+            }
+
+            .nav>.nav-btn>label {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                padding: 13px;
+            }
+
+            .nav>.nav-btn>label:hover,
+            .nav #nav-check:checked~.nav-btn>label {
+                background-color: var(--primary-variant-color);
+            }
+
+            .nav>.nav-btn>label>span {
+                display: block;
+                width: 25px;
+                height: 10px;
+                border-top: 2px solid #eee;
+            }
+
+            .nav>.nav-links {
+                position: absolute;
+                display: block;
+                width: 100%;
+                background-color: var(--primary-variant-color);
+                height: 0px;
+                transition: all 0.3s ease-in;
+                overflow-y: hidden;
+                top: 50px;
+                left: 0px;
+            }
+
+            .nav>.nav-links>a {
+                display: block;
+                width: 100%;
+            }
+
+            .nav>#nav-check:not(:checked)~.nav-links {
+                height: 0px;
+            }
+
+            .nav>#nav-check:checked~.nav-links {
+                height: auto;
+                overflow-y: auto;
+            }
+        }
+
+        /* Main content styles */
+        .content {
+            max-width: 70%;
+            margin: 20px auto;
+            padding: 20px;
+           
+        }
+
+        section.wrapper {
+            width: 100%;
+            margin: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .row {
+            margin: 0;
+        }
+
+        .sec {
+            width: 100%;
+            padding: 6% 0;
+        }
+
+        .about {
+            padding: 5% 0;
+            background: var(--primary-variant-color);
+            font: normal 42px var(--font-family);
+            /* color: #444; */
+        }
+
+        .home-img {
+            
+            border-radius: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            float: right;
+            width: 50%;
+            object-fit: cover;
+        }
+      
+        .home-img  img {
+            width: 70%;
+            height:70%;
+            position: relative;
+            object-fit: cover;
+            
+            float: right;
+           
+        }
+
+
+        .big-hi {
+            font: bold 110% var(--font-family);
+            color: var(--primary-color);
+            padding: 10px 0;
+        }
+
+
+        .about-p {
+            line-height: 1.2;
+            padding: 0 15px;
+            text-align: -webkit-match-parent;
+        }
+
+        @media (max-width: 600px) {
+
+          
+            section.wrapper {
+                flex-direction: column;
+                margin-top: 80px;
+
+            }
+            .home-img {
+           
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            
+            width:50%;
+            height: auto;
+            object-fit: cover;
+        }
+        .home-img  img {
+            width: 80%;
+            position: relative;
+            bottom:50px;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+            .about-p,
+            section.wrapper .home-img {
+                width: 100%;
+                margin-top: 50px;
+                text-align: -webkit-match-parent;
+            }
+        }
+
+        /* Section styles */
+        .section {
+            /* background-color: #f9f9f9; */
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            line-height: 1.5;
+            padding: 0 15px;
+        }
+
+
+        .project-grid {
+            display: grid;
+            background-color: var(--primary-variant-color);
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            /* width: 90%; */
+            max-width: 90%;
+            max-height: 90%;
+            grid-gap: 50px;
+            margin: auto;
+            align-items: center;
+            border-radius: 12px;
+
+        }
+
+        .project-card {
+            margin: 25px;
+            background-color: var(--secondary-variant-color);
+            border-radius: 15px;
+        }
+
+
+        .project-thumbnail {
+            height: calc(100% - 6.8rem);
+            object-fit: cover;
+            width: 100%;
+            aspect-ratio: 6.5/4;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .project-description {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+        }
+
+        @media (max-width: 600px) {
+            #portfolio {
+                height: 70%;
+                gap: 10px;
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+                margin: 18px;
+            }
+        }
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 10%;
+            font-size: 200%;
+          
+        }
+        .aboutProject {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 3%;
+            font-size: 200%;          
+        }
+
+        p {
+            margin-top: 18px;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 45px;
+            font-size: 70%;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            margin-top: 0px;
+
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 15px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .aboutProject {
+                font-family: 'Montserrat', sans-serif;
+                text-align: center;
+                margin-bottom: 8%;
+                font-size: 200%;
+                /* text-shadow: 0 0 5px #cacaca; */
+            }
+
+            nav a {
+                margin: 0 5px;
+            }
+        }
+
+        /* contact form style */
+
+
+        .container_contact {
+            align-content: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .container_contact .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* max-width: 70%; */
+            /* margin: 20px auto; */
+            padding: 20px;
+        }
+
+        .container_contact .content .contact-side {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .content .contact-side .details {
+            margin: 14px;
+            text-align: center;
+        }
+
+        .content .contact-side .details i {
+            font-size: 30px;
+            color: var(--primary-variant-color);
+            margin-bottom: 10px;
+        }
+
+        .content .contact-side .details .topic {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-variant-color);
+            padding-bottom: 5px;
+
+        }
+
+        .content .contact-side .details .text-one,
+        .content .contact-side .details .text-two {
+            font-size: 12px;
+           
+            max-width: 100%;
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 0 20px;
+          
+            padding-inline: 10px;
+            justify-content: space-evenly;
+
+
+        }
+
+        @media (max-width: 600px) {
+            .container_contact {
+                margin: 20px 0;
+                height: 100%;
+            }
+
+            .container_contact .content {
+                flex-direction: column-reverse;
+            }
+
+            .container_contact .content .contact-side {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 40px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .container .content .contact-side::before {
+                display: none;
+            }
+
+            .container .content .right-side {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .content .contact-side .details {
+                margin: 14px;
+                text-align: center;
+                white-space: nowrap;
+                width: 95%;
+                line-height: 2ch;
+            }
+        }
+
+        .address,
+        .phone,
+        .email {
+            width: 30%;
+        }
+
+        .text {
+            width: 100%;
+            line-break: normal;
+        }
+    </style>
+</head>
+
+<body >
+    <header>
+
+        <div class="nav">
+            <input type="checkbox" id="nav-check">
+            <div class="nav-header">
+                <div class="nav-title editable" contenteditable="true" data-max-chars="20">
+                    technofiy
+                </div>
+            </div>
+            <div class="nav-btn">
+                <label for="nav-check">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#home" class="editable" contenteditable="true" data-max-chars="20">Home</a>
+                <a href="#about" class="editable" contenteditable="true" data-max-chars="20">About</a>
+                <a href="#projects" class="editable" contenteditable="true" data-max-chars="20">Projects</a>
+                <a href="#contact" class="editable" contenteditable="true" data-max-chars="20">Contact</a>
+            </nav>
+        </div>
+    </header>
+    <div class="section" id="1">
+        <section id="home">
+            <h2 class="editable" contenteditable="true" data-max-chars="100">Welcome to our Website</h2>
+            <p class="editable" contenteditable="true" data-max-chars="100">this is a home section! </p>
+        </section>
+    </div>
+
+    <!-- <hr /> -->
+    <!-- about -->
+    <div id="1">
+        <section id="about" class="row about sec">
+            <div class="wrapper">
+                <div class="home-img">
+                    <div class="imageContainer">
+                        <img src="https://i.pinimg.com/originals/d5/b0/4c/d5b04cc3dcd8c17702549ebc5f1acf1a.png"
+                            class="fileInput" id="image1" onclick=chooseFile() alt=" home-page" />
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-3">
+     <img class='img-responsive about-img' src='https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png'/>
+    </div> -->
+
+                <div class="about-p">
+                    <div>
+                        <span class="big-hi editable" contenteditable="true" data-max-chars="80">Hi there, I'm john the
+                            developer</span><br />
+                    </div>
+                    <div>
+                        <span contenteditable="true" class="editable" data-max-chars="200">I build Beautiful & very
+                            Professional websites and that are Mobile friendly too.
+                    </div>
+                    </span>
+                    <!-- <br/>I also design Logos which clearly define your Brand.
+                    <br/> -->
+                    <hr size="1" color="#00AF66">
+                    </hr>
+                    <div style="color:#eee; text-transform:uppercase; font-size:60%;" contenteditable="true"
+                        class="editable" data-max-chars="150">Frontend Web Developer - Graphic Designer - Blogger</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- project info -->
+    <div id="2">
+
+        <section id="projects">
+            <header>
+                <h2 class="aboutProject editable" contenteditable="true" data-max-chars="70">Here are some of my
+                    projects</h2>
+            </header>
+            <div class="project-grid">
+                <div class="project-card">
+                    <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQYPSysQ3cwNDug6d6KlkwJ2HHe21BzFTRi9henoGgMCC0Hnorg"
+                        id="image2" onclick="chooseFile() " class="project-thumbnail fileInput">
+                    <p class="project-description">
+                        <span contenteditable="true" class="editable" data-max-chars="50">ChatBot</span>
+                    </p>
+                </div>
+                <div class="project-card">
+                    <img src="https://i.ibb.co/fpCBGJR/techdoc.jpg" id="image3" onclick="chooseFile()"
+                        class="project-thumbnail fileInput">
+                    <p class="project-description">
+                        <span contenteditable="true" class="editable" data-max-chars="60">technical Documentation</span>
+                    </p>
+                </div>
+                <div class="project-card">
+                    <img src="https://i0.wp.com/www.lovelycoding.org/wp-content/uploads/2022/09/Attendance-Management-System.webp?fit=640%2C427&ssl=1"
+                        id="image4" onclick="chooseFile()" class="project-thumbnail fileInput">
+                    <p class="project-description">
+                        <span contenteditable="true" class="editable" data-max-chars="60">Attendance management
+                            system</span>
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- contact us -->
+
+    <hr style="background-color: #00AF66;" />
+
+    <div id="3">
+        <section class="contact" id="contact">
+            <h2 class="heading editable" contenteditable="true" data-max-chars="30">Contact Us</h2>
+            <div class="container_contact">
+
+                <div class="content">
+
+                    <div class="contact-side">
+                        <div class="address details">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="topic">Address</div>
+                            <div class="text">
+                                <div class="text-one editable" contenteditable="true" data-max-chars="100">b-104
+                                    sandipTower,paldi,a'bad, 380032</div>
+                                <div class="text-two editable" contenteditable="true" data-max-chars="100">
+                                    b-03,shantinath society,vejalpur,a'bad 380052</div>
+                            </div>
+                        </div>
+                        <div class="phone details">
+                            <i class="fas fa-phone-alt"></i>
+                            <div class="topic">Phone</div>
+                            <div class="text">
+                                <div class="text-one editable" contenteditable="true" data-max-chars="15">+91758964153
+                                </div>
+                                <div class="text-two editable" contenteditable="true" data-max-chars="15">+918569314785
+                                </div>
+                            </div>
+                        </div>
+                        <div class="email details">
+                            <i class="fas fa-envelope"></i>
+                            <div class="topic">Email</div>
+                            <div class="text">
+                                <div class="text-one editable" contenteditable="true" data-max-chars="60">
+                                    personify345@gmail.com
+                                </div>
+                                <div class="text-two editable" contenteditable="true" data-max-chars="60">
+                                    developer534@gmail.com
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- contact us end -->
+    <hr style="color: #00AF66;" />
+    <!-- Footoer start  -->
+    <footer>
+        <p contenteditable="true" class="editable" data-max-chars="100">&copy; 2023 My Website. All rights reserved.
+            <br>Made by WDA</p>
+    </footer>
+
+    <script id="imgMapping">
+      function getQueryParameters() {
+        var queryParams = window.location.search.substr(1).split("&");
+        var params = {};
+
+        queryParams.forEach(function (param) {
+          var paramParts = param.split("=");
+          var paramName = decodeURIComponent(paramParts[0]);
+          var paramValue = decodeURIComponent(paramParts[1]);
+          params[paramName] = paramValue;
+        });
+
+        return params;
+      }
+
+      var params = getQueryParameters();
+      var ipaddress = params.ipaddress;
+
+      function onImageTap(imgId) {
+        AndroidInterface.onImageTap(imgId);
+      }
+
+      function setImages(data) {
+        const imgdata = JSON.parse(data);
+        const img = document.getElementById(imgdata.id);
+        if (img) {
+          img.src = `http://${ipaddress}/` + `${imgdata.url}?` + Date.now();
+        }
+      }
+    </script>
+
+  <script id=" charcount" >
+    
+
+    const editableElements = document.querySelectorAll('.editable');
+    let focusedEditable = null; // Track the currently focused editable element
+  
+    editableElements.forEach(function (editable, index) {
+      const maxChars = parseInt(editable.getAttribute('data-max-chars'));
+   const uniqueId = 'editableText_' + index; // Unique identifier for each editable element
+   const savedText = localStorage.getItem(uniqueId);
+    if (savedText) {
+      editable.textContent = savedText;
+    }
+      // Create a character count element for each editable element
+      const charCount = document.createElement('div');
+      charCount.className = 'charCount';
+      charCount.style.display = 'none'; // Initially hide it
+      editable.insertAdjacentElement('afterend', charCount);
+  
+      editable.addEventListener('focus', function () {
+        focusedEditable = this;
+        charCount.style.display = 'block';
+        updateCharCount(this, charCount);
+      });
+  
+      editable.addEventListener('paste', function (event) {
+        // Access clipboard data
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedText = clipboardData.getData('text/plain');
+  
+        // Check if pasted content is plain text
+        if (!pastedText) {
+          event.preventDefault();
+          alert('Pasting images is not allowed.');
+        }
+      });
+  
+      editable.addEventListener('drop', function (event) {
+        event.preventDefault();
+        alert('Dragging and dropping is not allowed. Only plain text is allowed.');
+      });
+  
+      editable.addEventListener('blur', function () {
+        focusedEditable = null;
+        charCount.style.display = 'none';
+      });
+  
+      editable.addEventListener('keydown', function (event) {
+        const currentText = this.textContent;
+        const remainingChars = maxChars - currentText.length;
+        if (remainingChars <= 0 && event.key !== 'Backspace' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+          event.preventDefault();
+        }
+      });
+  
+      editable.addEventListener('input', function () {
+        let currentText = this.textContent;
+        const remainingChars = maxChars - currentText.length;
+      
+  
+        if (remainingChars < 0) {
+          alert("You Have Reached Your Limits"  );
+          currentText = currentText.substring(0, maxChars);
+          this.textContent = currentText;
+          this.contentEditable = "false"; // Disable editing
+          // localStorage.setItem("editableText", currentText);
+          window.location.reload();
+        }else{
+          this.contentEditable = "true"; // Enable editing
+          // updateCharCount(this, charCount, remainingChars);
+          localStorage.setItem(uniqueId, currentText);
+      // Save the content in local storage
+      // localStorage.setItem("editableText", currentText);
+        }
+        updateCharCount(this, charCount, remainingChars);
+      });
+    });
+  
+    // Function to update the character count display
+    function updateCharCount(editable, charCount, remainingChars) {
+      const maxChars = parseInt(editable.getAttribute('data-max-chars'));
+      const currentText = editable.textContent;
+  
+      charCount.style.display = 'block';
+      charCount.style.margin = '5px';
+      charCount.style.bottom = '5px';
+      charCount.style.position = 'relative';
+      charCount.style.float = 'right';
+  
+      charCount.textContent = ' ' + currentText.length + ' / ' + maxChars + ' ';
+  
+      // You can style the character count element or provide feedback to the user when the limit is reached
+      if (remainingChars <= 0) {
+        charCount.style.color = 'red';
+      } else {
+        charCount.style.color = '';
+      }
+    }
+  </script>
+  
+  
+ 
+</body>
+
+</html>

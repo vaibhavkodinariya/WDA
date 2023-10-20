@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>photostudio</title>
+
+
+  <!---- Font Awesome Cdn Linkage ------>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!------- Favicon Linkage --------->
+  <link rel="shortcut icon" href="fav.png" type="x-icon">
+
+  <script>
+    function chooseFile() {
+      AndroidInterface.showFileChooser(event.target.id);
+    }
+    function yourFileUploadHandler(filePaths) {
+      console.log(filePaths);
+    }
+  </script>
+
+</head>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap");
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0em;
+    /* Adjust the width as needed */
+  }
+
+  :root {
+    --primary-color:#fff;
+    --primary-variant-color:#f2f2f2;
+    --secondary-color:#F9A84B;
+    --secondary-variant-color:#F7941F;
+    --text-color:#F7941F;
+    --font-family:"Roboto";
+  }
+
+  section {
+    margin-top: 80px;
+  }
+
+  /* .editable {
+    position: relative;
+  } */
+
+  [contenteditable="true"] {
+    /* outline: none; */
+    resize: none;
+    overflow: hidden;
+    border: #777 1px;
+    margin-block: 5px;
+  }
+
+  [contenteditable="true"]:empty:focus::before {
+    content: "Click to start typing";
+    color: #aaa;
+  }
+
+  [contenteditable="true"]:empty::before {
+    content: "";
+    
+    /* Clear the message when the element is focused */
+  }
+
+  hr {
+    width: 90vw;
+    margin: 70px auto;
+    border: 0.5px solid var(--secondary-variant-color);
+  }
+
+  body {
+    font-family: "Roboto", sans-serif;
+    background-color: var(--primary-color);
+  }
+
+  header {
+    background-color: var(--primary-color);
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    min-height: 8vh;
+    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    /* position: relative; */
+  }
+
+  .heading {
+    font-size: 35px;
+    color: var(--text-color);
+    line-height: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  nav.navigation {
+    margin: 0 auto;
+    padding: 10px 0;
+    float: right;
+    position: relative;
+    top: 4px;
+  }
+
+  .logo {
+    height: auto;
+    width: 20%;
+    padding: 5px;
+    position: fixed;
+    margin-left: 20px;
+    /* display: grid; */
+  }
+
+  img {
+    pointer-events: auto;
+  }
+
+  .logo img {
+    object-fit: contain;
+    width: 150px;
+    height: 45px;
+    aspect-ratio: 3/4;
+  }
+
+  nav.navigation .nav-list ul li {
+    display: inline-block;
+    margin: 0 20px;
+  }
+
+  nav.navigation .nav-list ul li a {
+
+    font-size: 18px;
+    transition: all 0.5s ease;
+    color: var(--text-color);
+  }
+
+  /* nav.navigation .nav-list ul li a:hover {
+  color: #db1e1e;
+} */
+
+  #toogle {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    
+    header {
+      min-height: 70px;
+    }
+
+    .logo {
+      position: absolute;
+      left: 75%;
+      width: 90%;
+      height: 70%;
+      margin-left: 2px;
+    }
+
+    .logo img {
+      right: 42px;
+      top: 3px;
+      position: relative;
+      object-fit: contain;
+      width: 125px;
+      height: 52px;
+      /* text-align: center; */
+    }
+
+
+    nav.navigation .nav-list {
+      margin: 8px auto;
+      position: relative;
+      /* align-items: center; */
+      right: 30px;
+    }
+
+    nav.navigation .nav-list ul {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .tbox {
+      height: 50px;
+      width: 50px;
+      cursor: pointer;
+      position: absolute;
+      z-index: 2;
+      background-color: transparent;
+    }
+
+    #toogle {
+      height: 2px;
+      width: 30px;
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      background-color: var(--text-color);
+      display: block;
+      cursor: pointer;
+    }
+
+    #toogle::before {
+      content: "";
+      height: 2px;
+      width: 30px;
+      position: absolute;
+      top: 10px;
+      left: 0px;
+      background-color: var(--text-color);
+    }
+
+    #toogle::after {
+      content: "";
+      height: 2px;
+      width: 30px;
+      position: absolute;
+      bottom: 10px;
+      left: 0px;
+      background-color: var(--secondary-variant-color);
+    }
+
+    #toogle.active {
+      height: 0;
+      width: 0;
+    }
+
+    #toogle.active::before {
+      content: "";
+      transform: rotate(45deg);
+      top: 0px;
+      left: 0px;
+    }
+
+    #toogle.active::after {
+      content: "";
+      transform: rotate(-45deg);
+      bottom: -2px;
+      left: 0px;
+    }
+
+    nav.navigation:active {
+      overflow: hidden;
+      scroll-behavior: none;
+      background-position: fixed;
+      display: fixed;
+    }
+
+    nav.navigation .nav-list.active ul {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      padding: 10px;
+      right: 70px;
+      top: -65px;
+      position: relative;
+      width: 20%;
+    }
+
+    nav.navigation .nav-list.active ul li {
+      margin: 20px 0;
+      width: 100px;
+      /* height: 100vh; */
+    }
+  }
+
+  section.home {
+    min-height: 100vh;
+    width: 90vw;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+  }
+
+  section.home .intro {
+    width: 50%;
+  }
+
+  section.home .intro p {
+    font-size: 20px;
+    margin: 1.25rem 0rem;
+    /* color: #373738; */
+    line-height: 1.5;
+  }
+
+  section.home .intro h1 {
+    font-size: 35px;
+    color: var(--text-color);
+    line-height: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  section.home .intro span {
+    background-color: var(--text-color);
+    margin-right: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.375rem 1.25rem;
+    /* transition: ease-in-out 0.7s; */
+    border: 1px solid transparent;
+
+  }
+
+  section.home .intro span a {
+    color: var(--primary-color);
+  }
+
+  section.home .home-img {
+    width: 50%;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  section.home .home-img img {
+    width: 70%;
+  }
+
+  @media (max-width: 650px) {
+    section.home {
+      flex-direction: column;
+      margin-top: 80px;
+    }
+
+    section.home .intro,
+    section.home .home-img {
+      width: 100%;
+      margin-top: 50px;
+    }
+  }
+
+  .about {
+    margin-bottom: 30px;
+    min-height: 100vh;
+  }
+
+  .about-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+  }
+
+  .about-container .img {
+    width: 60%;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about-container .img img {
+    width: 60%;
+
+  }
+
+  .about-container .text {
+    width: 40%;
+  }
+
+  .about-container .text p {
+    margin: 20px 0px;
+    font-size: 15px;
+    /* color: #373738; */
+    line-height: 30px;
+    font-weight: 400;
+  }
+
+  @media (max-width: 650px) {
+    .about-container {
+      flex-direction: column;
+      margin-top: 80px;
+      width: 100%;
+    }
+
+    .about-container .text,
+    .about-container .img {
+      width: 100%;
+    }
+
+    .about-container .text p {
+      padding: 20px;
+    }
+  }
+
+  .services {
+    margin-bottom: 30px;
+  }
+
+  .services .service-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    width: 90vw;
+    margin: 30px auto;
+    justify-items: center;
+  }
+
+  .services .service-container .box {
+    margin: 20px 0px;
+    padding: 15px 18px 20px 15px;
+    background: var(--primary-variant-color);
+    text-align: center;
+    box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 10%);
+    cursor: pointer;
+    /* transition: all 0.3s ease-in-out; */
+  }
+
+  .services .service-container .box i {
+    color: var(--text-color);
+    font-size: 40px;
+    margin: 10px;
+
+    text-align: center;
+  }
+
+  .services .service-container .box h3 {
+    color: var(--text-color);
+    text-transform: uppercase;
+    padding: 10px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 1.25rem 0rem;
+    width: 250px;
+    text-align: center;
+  }
+
+  .services .service-container .box p {
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 400;
+    /* color: #373738; */
+    margin: 1.25rem 0rem;
+    width: 250px;
+    text-align: center;
+  }
+
+
+
+  /*Media query for screens between 768px and 991px (tablet view)*/
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .services .service-container
+     {
+      grid-template-columns: repeat(2, 1fr);
+      width: 90%;
+      /* Adjust the width as needed */
+    }
+  }
+
+  /* Media query for screens smaller than 768px (mobile view) */
+
+  @media (max-width: 767px) {
+    .services .service-container {
+      grid-template-columns: repeat(1, 1fr);
+      width: 90%;
+      /* Adjust the width as needed */
+    }
+  }
+
+  /* Media query for screens smaller than 400px (smaller mobile view) */
+
+  @media (max-width: 400px) {
+    .services .service-container {
+      width: 95%;
+      /* Adjust the width as needed */
+    }
+
+    .services .service-container .box h3 {
+      left: 0;
+      /* Adjust the left offset as needed */
+    }
+
+    .services .service-container .box p {
+      left: 0;
+      /* Adjust the left offset as needed */
+    }
+  }
+
+
+  .gallery-img {
+    width: 90vw;
+    margin: 30px auto;
+  }
+
+  .gbox {
+    /* display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr); */
+    display: flex;
+    /* align-content: center; */
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+
+  }
+
+  div.gallery {
+    margin: 15px;
+    border: 1px solid #ccc;
+    width: 350px;
+  }
+
+  div.subContainer {
+    width: 80%;
+    display: flex;
+    align-self: center;
+    position: relative;
+    justify-content: center;
+    padding: 5px;
+  }
+
+  div.subContainer img {
+    width: 100%;
+    height: 80%;
+    aspect-ratio: 3/2;
+    object-fit: fill;
+    left: 33px;
+    position: relative;
+  }
+
+  div.gallery img {
+    width: 100%;
+    height: 80%;
+    aspect-ratio: 3/3;
+    object-fit: cover;
+  }
+
+  div.desc {
+    padding: 15px;
+    text-align: center;
+    margin: 1.2rem;
+    width: 250px;
+    position: relative;
+    left: 30px;
+  }
+
+
+  @media (max-width: 412px) {
+
+    div.gallery,
+    div.gallery img {
+      width: 100%;
+    }
+
+    div.desc {
+      padding: 15px;
+      text-align: center;
+      margin: 0.25rem 0rem;
+      width: 250px;
+      position: relative;
+
+      left: 32px;
+    }
+  }
+
+  .contact {
+    width: 90vw;
+    margin: 0 auto;
+  }
+
+  
+
+  @media (max-width: 462px) {
+    .contact .input-wrap {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  footer {
+    background: var(--secondary-variant-color);
+    height: auto;
+    width: 100%;
+    padding-top: 40px;
+    color: white;
+  }
+
+  footer .footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  footer .footer-content p {
+    max-width: 30ch;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+  }
+
+
+
+  /* footer .footer-content .solink a:hover i {
+  
+} */
+
+  footer .footer-bottom {
+    background: var(--secondary-color);
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    color: white;
+  }
+
+
+  .section-team {
+    width: 90vw;
+    margin: 30px auto;
+    min-height: 90vh;
+  }
+
+  .section-team .container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .section-team .container .card {
+    position: relative;
+    width: 280px;
+    height: 400px;
+    background-color: var(--secondary-variant-color);
+    margin: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .section-team .container .card .imgbox {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 105%;
+    height: 110%;
+    /* transition: 0.5s; */
+    /* z-index: 90; */
+    /* transform-origin: top; */
+    border-radius: 20px;
+    overflow: hidden;
+    /* transition: 1s; */
+  }
+
+  /* .section-team .container .card:hover .imgbox {
+  transform: translateY(30px) scale(0.5) rotate(360deg);
+} */
+
+.section-team .container .card .imgbox .subTeamimg {
+   
+    width: 100%;
+    height: 80%;
+    transform: scale(0.7);
+    position: relative;
+    right: 3px;
+   
+  }
+  .section-team .container .card .imgbox img {
+    object-fit: fill;
+    width: 100%;
+    height: 65%;
+    
+    aspect-ratio: 3/4;
+  }
+
+  .section-team .container .card .content {
+    
+    position: relative;
+    left: 0;
+    width: 100%;
+    transform: translateY(215px);
+  }
+
+
+
+  .section-team .container .card .content .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* margin-top: 50px; */
+  }
+
+  .section-team .container .card .content .details h2 {
+    font-size: 20px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .section-team .container .card .content .details h2 span {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+
+
+  /* .section-team .container .card .content .details .social li a:hover {
+  transform: rotate(360deg);
+} */
+
+
+  footer .footer-content .heading {
+    color: white;
+  }
+
+
+
+  .container_contact {
+    align-content: center;
+    justify-content: center;
+    border-radius: 6px;
+
+  }
+
+  .container_contact .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;  
+  }
+
+  .container_contact .content .contact-side {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    position: relative;
+  }
+
+  .content .contact-side .details {
+    margin: 14px;
+    text-align: center;
+  }
+
+  .content .contact-side .details i {
+    font-size: 30px;
+    color: var(--secondary-variant-color);
+    margin-bottom: 10px;
+  }
+
+  .content .contact-side .details .topic {
+    font-size: 18px;
+    font-weight: 500;
+    color: #222;
+    padding-bottom: 5px;
+  }
+
+
+  .content .contact-side .details .text-one,
+  .content .contact-side .details .text-two {
+    font-size: 14px;
+    color: #222;
+    width: 80%;
+    position: relative;
+    margin: auto;
+    margin-bottom: 3px;
+    white-space: pre-line;
+    padding-block: 1% 1%;
+    padding-inline: 10px;
+    
+  }
+
+  @media (max-width: 600px) {
+    .container_contact {
+      margin: 20px 0;
+      height: 100%;
+    }
+
+    .container_contact .content {
+      flex-direction: column-reverse;
+    }
+
+    .container_contact .content .contact-side {
+      width: 100%;
+      flex-direction: column;
+      margin-top: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .container .content .contact-side::before {
+      display: none;
+    }
+
+    .container .content .right-side {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .content .contact-side .details {
+      margin: 14px;
+      text-align: center;
+      white-space: nowrap;
+      width: 95%;
+      line-height: 2ch;
+    }
+  }
+  .address,.phone,.email {
+    width: 40%;
+  }
+
+  .text {
+    width: 100%;
+    line-break: normal;
+  }
+</style>
+
+<body>
+
+  <!---- Navigation ------>
+  <header>
+    <div class="tbox" id="tbox">
+      <div id="toogle"></div>
+    </div>
+    <div class="logo">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEj4RQ5LmQzSGreoYQjlbM4Mm6PElTbzRI8A&usqp=CAU"
+        class="fileInput" id="logo" alt="logo" onclick="chooseFile()" /> &nbsp;
+
+    </div>
+    <nav class="navigation">
+      <div class="nav-list" id="nav-list">
+        <ul>
+          <li><a class="list editable" href="#home" contenteditable="true" data-max-chars="20">Home</a></li>
+          <li><a class="list editable" href="#about" contenteditable="true" data-max-chars="20">About</a></li>
+          <li><a class="list editable" href="#services" contenteditable="true" data-max-chars="20">Services</a></li>
+          <li><a class="list editable" href="#gallery" contenteditable="true" data-max-chars="20">Gallery</a></li>
+          <li><a class="list editable" href="#contact" contenteditable="true" data-max-chars="20">Contact</a></li>
+          <li><a class="list editable" href="#team" contenteditable="true" data-max-chars="20">Team</a></li>
+        </ul>
+      </div>
+    </nav>
+    <!-- <div class="counter" id="charCount" contenteditable="false">Total chars: 0 (100 remaining)</div> -->
+  </header>
+  <!---- Navigation End ------>
+
+  <!---- Home Section ------>
+  <div id="1">
+    <section class="home" id="home">
+      <div class="intro">
+        <h1 class="editable" contenteditable="true" data-max-chars="100">WE ARE MEMORY-CAPTURES</h1>
+        <p class="editable" contenteditable="true" data-max-chars="500">
+          We are a team of passionate photographers dedicated to capturing timeless moments and creating stunning visual
+          stories through our lens.We are a team of passionate photographers dedicated to capturing timeless moments and
+          creating stunning visual stories through our lens.</p>
+        <span><a href="#contact" contenteditable="false">Contact Us</a></span>
+        <span><a href="#gallery" contenteditable="false">Gallery</a></span>
+      </div>
+      <div class="home-img">
+        <img
+          src="https://cdni.iconscout.com/illustration/premium/thumb/photographer-doing-product-photography-3311559-2764343.png?f=webp"
+          alt=" home-page" class="fileInput" id="image2" onclick="chooseFile()" >
+      </div>
+    </section>
+  </div>
+  <!---- Home Section End ------>
+
+  <hr id="about">
+
+  <!---- About Section ------>
+  <div id="2">
+    <section class="about" id="about">
+      <h1 class="heading editable" contenteditable="true" data-max-chars="20">About Us</h1>
+      <div class="about-container">
+        <div class="img">
+          <img src="https://cdn-icons-png.flaticon.com/512/2317/2317973.png" alt="" class="fileInput" id="image3" onclick="chooseFile()">
+        </div>
+        <div class="text">
+          <p contenteditable="true" class="editable" data-max-chars="600">We are a professional photography studio committed to delivering exceptional and
+            artistic imagery that surpasses expectations. With a keen eye for detail and a love for storytelling, we aim
+            to immortalize life's most precious moments in every photograph we take. Our team of experienced
+            photographers strives to create a comfortable and enjoyable experience for our clients, ensuring their
+            personalities shine through in every frame. 
+          </p>
+            <p class="editable" contenteditable="true" data-max-chars="600">
+              From weddings and family portraits to corporate events and editorial shoots, we take pride in our diverse portfolio and the lasting memories we help create. Let us be your trusted photographers, capturing the essence of your special moments with creativity and finesse.Our team of experienced photographers strives to create a comfortable and enjoyable experience for our clients, ensuring their
+              personalities shine through in every frame. 
+            </p>
+        </div>
+
+      </div>
+    </section>
+  </div>
+  <!---- About Section End ------>
+
+  <hr id="services">
+  <!---- Services Section ------>
+  <div id="3">
+    <section class="services" id="services">
+      <h2 class="heading editable" contenteditable="true" data-max-chars="30">Our Services</h2>
+      <div class="service-container">
+        <div class="box">
+          <i class="fas fa-user"></i>
+          <h3 contenteditable="true" class="editable" data-max-chars="30">professional photographers</h3>
+          <p class="editable" contenteditable="true" data-max-chars="250"> customized photo albums that beautifully showcase
+            the client's photographs. These albums are thoughtfully curated to tell a visual story, capturing the</p>
+        </div>
+        <div class="box">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          <h3 contenteditable="true" class="editable" data-max-chars="30">enhance</h3>
+          <p class="editable" contenteditable="true" data-max-chars="250">we are edited and enhance your photos
+          </p>
+        </div>
+        <div class="box">
+          <i class="fa-regular fa-images"></i>
+          <h3 contenteditable="true" class="editable" data-max-chars="30">Album</h3>
+          <p class="editable" contenteditable="true" data-max-chars="250"> involve designing and creating customized photo albums that beautifully showcase
+            the client's photographs. These albums are thoughtfully curated to tell a visual story, capturing the
+            essence of the special occasion or event.</p>
+        </div>
+        <div class="box">
+          <i class="fa-solid fa-location-dot"></i>
+          <h3 contenteditable="true" class="editable" data-max-chars="30">location</h3>
+          <p class="editable" contenteditable="true" data-max-chars="250">we suggest some good location accordingly to his preference of which type of
+            photoshoot. </p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!---- Services Section End ------>
+
+  <hr id="gallery">
+  <!---- Gallery Section ------>
+  <div id="4">
+    <section class="gallery-img" id="gallery">
+      <h2 class="heading editable" contenteditable="true" data-max-chars="30">Our gallery</h2>
+      <div class="gbox">
+        <div class="gallery">
+          <div class="imgContainer">
+            <div class="subContainer">
+              <img src="https://i.pinimg.com/originals/19/26/b7/1926b73fee671afa1401afc7a0fe564a.jpg" alt="image" class="fileInput" id="image4" onclick="chooseFile()" />
+            </div>
+          </div>  
+          <div class="desc editable" contenteditable="true" data-max-chars="100">pre-wedding shoot</div>
+        </div>
+
+        <div class="gallery">
+          <div class="imgContainer">
+            <div class="subContainer">
+              <img src="https://www.modellingagenciesmumbai.com/blog/wp-content/uploads/2017/01/model-portfolio-shoot.jpg" alt="image" class="fileInput" id="image5" onclick="chooseFile()">
+            </div>
+          </div>
+          <div class="desc editable" contenteditable="true" data-max-chars="100">portfolio photoshoot</div>
+        </div>
+
+        <div class="gallery">
+          <div class="imgContainer">
+            <div class="subContainer">
+              <img src="https://media.flytographer.com/uploads/2023/01/1-photoshoot-outfits-flytographer-lisbon-photographer.jpeg" alt="image" class="fileInput" id="image6" onclick="chooseFile()">
+            </div>
+          </div>
+          <div  class="desc editable" contenteditable="true" data-max-chars="100">occasion photoshoot</div>
+        </div>
+
+        <div class="gallery">
+          <div class="imgContainer">
+            <div class="subContainer">
+              <img src="https://cdnblog.picsart.com/2022/01/1-7.jpg" alt="image" class="fileInput" id="image7" onclick="chooseFile()">
+            </div>
+          </div>
+          <div  class="desc editable" contenteditable="true" data-max-chars="100">documentary photoshoot</div>
+        </div>
+        <div class="gallery">
+          <div class="imgContainer">
+            <div class="subContainer">
+              <img src="https://shotkit.com/wp-content/uploads/2022/05/Corporate-Photoshoot-august-de-richelieu.jpeg" alt="image" class="fileInput" id="image8" onclick="chooseFile()">
+            </div>
+          </div>
+          <div  class="desc editable" contenteditable="true" data-max-chars="100">business photoshoot</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+  <!---- Gallery Section End ------>
+
+  <hr id="contact">
+  <!---- Contact Us Section ------>
+  <div id="5">
+    <section class="contact" id="contact">
+      <h2 class="heading editable" contenteditable="true" data-max-chars="30">contact us</h2>
+      <div class="container_contact">
+
+        <div class="content">
+
+          <div class="contact-side">
+            <div class="address details">
+              <i class="fas fa-map-marker-alt"></i>
+              <div class="topic">Address</div>
+              <div class="text">
+                <div class="text-one editable" contenteditable="true" data-max-chars="100">605,SaffronTower,Ambawadi,A'bad,380015</div>
+                <div class="text-two editable" contenteditable="true" data-max-chars="100">15,jainSociety,Paldi,A'bad,380006</div>
+              </div>
+            </div>
+            <div class="phone details">
+              <i class="fas fa-phone-alt"></i>
+              <div class="topic">Phone</div>
+              <div class="text"> 
+                <div class="text-one editable" contenteditable="true" data-max-chars="15">+0098 9893 5647</div>
+                <div class="text-two editable" contenteditable="true" data-max-chars="15">+0096 3434 5678</div>
+              </div>
+            </div>
+            <div class="email details">
+              <i class="fas fa-envelope"></i>
+              <div class="topic">Email</div>
+              <div class="text">
+                <div class="text-one editable" contenteditable="true" data-max-chars="60">photographer@gmail.com</div>
+                <div class="text-two editable" contenteditable="true" data-max-chars="60">info.photography@gmail.com</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+  <!---- Contact Us Section End ------>
+
+  <hr id="team">
+  <!---- Teams Section ------>
+  <div id="6">
+    <section class="section-team" id="team">
+      <h2 class="heading editable" contenteditable="true" data-max-chars="30">Our Team</h2>
+      <div class="container">
+        <div class="card">
+          <div class="imgbox">
+            <div class="subTeamimg">
+              <img src="https://www.shutterstock.com/shutterstock/photos/181349405/display_1500/stock-photo-successful-journalist-handsome-young-african-man-in-casual-wear-sitting-at-his-working-place-and-181349405.jpg" alt="image" class="fileInput" id="image9" onclick="chooseFile()" />
+            </div>
+          </div>
+          <div class="content">
+            <div class="details" contenteditable="false">
+              <h2 contenteditable="true" class="editable" data-max-chars="30">Sarvesh patel</h2>
+              <!-- <br /> -->
+              <h2 class="editable"  data-max-chars="30"><span contenteditable="true" >founder</span></h2>
+
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="imgbox">
+            <div class="subTeamimg">
+
+              <img src="https://dvyvvujm9h0uq.cloudfront.net/com/articles/1515135672-shutterstock_284581649.jpg"
+                alt="image" class="fileInput" id="image10" onclick="chooseFile()">
+            </div>
+          </div>
+          <div class="content">
+            <div class="details" contenteditable="false">
+              <h2 contenteditable="true" class="editable" data-max-chars="30">shruti patel</h2>
+              <!-- <br /> -->
+              <h2 class="editable"  data-max-chars="30"><span contenteditable="true" >senior video editor</span></h2>
+
+            </div>
+          
+          </div>
+        </div>
+        <div class="card">
+          <div class="imgbox">
+            <div class="subTeamimg">
+
+              <img src="https://careerninja.in/wp-content/uploads/2018/12/indian-photographer.jpg" alt="image" class="fileInput" id="image11" onclick="chooseFile()">
+            </div>
+          </div>
+          <div class="content">
+            <div class="details" contenteditable="false">
+              <h2 contenteditable="true" class="editable" data-max-chars="30">jay shah</h2>
+              <!-- <br /> -->
+              <h2 class="editable"  data-max-chars="30"><span contenteditable="true" >seniorphotographer</span></h2>
+
+            </div>
+          </div>
+          
+        </div>
+        <div class="card">
+          <div class="imgbox">
+            <div class="subTeamimg">
+              <img
+                src="https://us.123rf.com/450wm/nuiiko/nuiiko1512/nuiiko151200246/49211460-photographer-with-professional-digital-camera-taking-pictures-in-nature.jpg?ver=6"
+                alt="image" class="fileInput" id="image12" onclick="chooseFile()">
+            </div>
+
+          </div>
+         <div class="content">
+            <div class="details" contenteditable="false">
+              <h2 contenteditable="true" class="editable" data-max-chars="30">rajesh shah</h2>
+              <!-- <br /> -->
+              <h2  class="editable"  data-max-chars="30"><span contenteditable="true" >photographer</span></h2>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!---- Teams Section End ------>
+
+  <!------------- Footer ------------->
+  <footer>
+    <div class="footer-content">
+      <h1 class="heading editable" contenteditable="true" data-max-chars="20">photostudio</h1>
+      <p contenteditable="true" class="editable" data-max-chars="150">We are ready to capture your memories <b>photostudio..</b> </p>
+
+    </div>
+    <div class="footer-bottom" contenteditable="false">
+      <p contenteditable="true" class="editable" data-max-chars="100"> Copyright &copy; 2021 photostudio. Designed by <span
+          contenteditable="true">wda</span></p>
+    </div>
+  </footer>
+  <!------------- Footer End ------------->
+  <script id="navToggle">
+    document.getElementById('tbox').addEventListener('click', function () {
+      document.getElementById('nav-list').classList.toggle('active');
+
+      document.getElementById('toogle').classList.toggle('active');
+    });
+  </script>
+ <script id="imgMapping">
+  function getQueryParameters() {
+    var queryParams = window.location.search.substr(1).split("&");
+    var params = {};
+
+    queryParams.forEach(function (param) {
+      var paramParts = param.split("=");
+      var paramName = decodeURIComponent(paramParts[0]);
+      var paramValue = decodeURIComponent(paramParts[1]);
+      params[paramName] = paramValue;
+    });
+
+    return params;
+  }
+
+  var params = getQueryParameters();
+  var ipaddress = params.ipaddress;
+
+  function onImageTap(imgId) {
+    AndroidInterface.onImageTap(imgId);
+  }
+
+  function setImages(data) {
+    const imgdata = JSON.parse(data);
+    const img = document.getElementById(imgdata.id);
+    if (img) {
+      img.src = `http://${ipaddress}/` + `${imgdata.url}?` + Date.now();
+    }
+  }
+</script>
+  <!-- script for charcount / character limit track and preventing user to add images in editable   -->
+
+  <script id=" charcount" >
+    
+
+    const editableElements = document.querySelectorAll('.editable');
+    let focusedEditable = null; // Track the currently focused editable element
+  
+    editableElements.forEach(function (editable, index) {
+      const maxChars = parseInt(editable.getAttribute('data-max-chars'));
+   const uniqueId = 'editableText_' + index; // Unique identifier for each editable element
+   const savedText = localStorage.getItem(uniqueId);
+    if (savedText) {
+      editable.textContent = savedText;
+    }
+      // Create a character count element for each editable element
+      const charCount = document.createElement('div');
+      charCount.className = 'charCount';
+      charCount.style.display = 'none'; // Initially hide it
+      editable.insertAdjacentElement('afterend', charCount);
+  
+      editable.addEventListener('focus', function () {
+        focusedEditable = this;
+        charCount.style.display = 'block';
+        updateCharCount(this, charCount);
+      });
+  
+      editable.addEventListener('paste', function (event) {
+        // Access clipboard data
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedText = clipboardData.getData('text/plain');
+  
+        // Check if pasted content is plain text
+        if (!pastedText) {
+          event.preventDefault();
+          alert('Pasting images is not allowed.');
+        }
+      });
+  
+      editable.addEventListener('drop', function (event) {
+        event.preventDefault();
+        alert('Dragging and dropping is not allowed. Only plain text is allowed.');
+      });
+  
+      editable.addEventListener('blur', function () {
+        focusedEditable = null;
+        charCount.style.display = 'none';
+      });
+  
+      editable.addEventListener('keydown', function (event) {
+        const currentText = this.textContent;
+        const remainingChars = maxChars - currentText.length;
+        if (remainingChars <= 0 && event.key !== 'Backspace' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+          event.preventDefault();
+        }
+      });
+  
+      editable.addEventListener('input', function () {
+        let currentText = this.textContent;
+        const remainingChars = maxChars - currentText.length;
+      
+  
+        if (remainingChars < 0) {
+          alert("You Have Reached Your Limits"  );
+          currentText = currentText.substring(0, maxChars);
+          this.textContent = currentText;
+          this.contentEditable = "false"; // Disable editing
+          // localStorage.setItem("editableText", currentText);
+          window.location.reload();
+        }else{
+          this.contentEditable = "true"; // Enable editing
+          // updateCharCount(this, charCount, remainingChars);
+          localStorage.setItem(uniqueId, currentText);
+      // Save the content in local storage
+      // localStorage.setItem("editableText", currentText);
+        }
+        updateCharCount(this, charCount, remainingChars);
+      });
+    });
+  
+    // Function to update the character count display
+    function updateCharCount(editable, charCount, remainingChars) {
+      const maxChars = parseInt(editable.getAttribute('data-max-chars'));
+      const currentText = editable.textContent;
+  
+      charCount.style.display = 'block';
+      charCount.style.margin = '5px';
+      charCount.style.bottom = '5px';
+      charCount.style.position = 'relative';
+      charCount.style.float = 'right';
+  
+      charCount.textContent = ' ' + currentText.length + ' / ' + maxChars + ' ';
+  
+      // You can style the character count element or provide feedback to the user when the limit is reached
+      if (remainingChars <= 0) {
+        charCount.style.color = 'red';
+      } else {
+        charCount.style.color = '';
+      }
+    }
+  </script>
+
+
+</body>
+
+</html>
