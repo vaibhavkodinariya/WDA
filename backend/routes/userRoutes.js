@@ -8,6 +8,7 @@ const {
   getUserProfile,
   getUserWebsites,
   raiseQuery,
+  validedDomain,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.post("/verifyOtp", verifyOtp);
 router.post("/registerUser", registerUser);
 router.put("/updateUserProfile", updateUserProfile);
 router.post("/raiseQuery", raiseQuery);
+router.get("/validedUser/:domain", validedDomain);
 
 module.exports = router;

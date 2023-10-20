@@ -36,11 +36,36 @@ const userLogin = asyncHandler(async (req, res) => {
     } else {
       res.send({
         success: true,
-        name: userdata,
+        userID: userdata._id,
+        Name: userdata.Name,
+        ContactNo: userdata.ContactNo,
       });
     }
   } else {
     res.send({ success: false, message: "Incorrect Username or Password" });
+  }
+});
+
+//@desc Valided user
+//@Route /api/user/validedDomain
+//access Private
+const validedDomain = asyncHandler(async (req, res) => {
+  const { domain } = req.params;
+
+  if (!domain) {
+    return res.send(
+      res.json({ success: false, message: "Please fill your Credentails" })
+    );
+  } else {
+    const validedDomain = domain.replace(/\s+/g, "");
+    const isValid = await Website.findOne({
+      domainName: `${validedDomain}.html`,
+    });
+    if (isValid) {
+      return res.send({ success: true, message: "WebSite Exists" });
+    } else {
+      return res.send({ success: false, message: "WebSite Not Exists" });
+    }
   }
 });
 
@@ -286,6 +311,7 @@ const raiseQuery = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  validedDomain,
   userLogin,
   sendOtp,
   verifyOtp,
