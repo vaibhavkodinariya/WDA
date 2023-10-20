@@ -71,7 +71,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
   if (!htmlFile || !webSiteName || !websiteType || !userId) {
     return res.send({
       success: false,
-      message: "Please Give Appropriate Data",
+      message: "Please Fill All The Data",
     });
   } else {
     let isActive = await Website.findOne({ websiteName: webSiteName });
@@ -140,7 +140,7 @@ const websiteRegister = asyncHandler(async (req, res) => {
 const updateRegisteredWebsite = asyncHandler(async (req, res) => {
   const { updatedWebsiteCode, webSiteName } = req.body;
   if (!updatedWebsiteCode || !webSiteName) {
-    return res.send({ success: false, message: "Data Is Not Appropriate" });
+    return res.send({ success: false, message: "Please Select Your WebSite" });
   } else {
     const newPath = path.dirname(__dirname);
 

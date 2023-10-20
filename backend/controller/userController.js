@@ -77,7 +77,7 @@ const sendOtp = asyncHandler(async (req, res) => {
   if (!name || !type || !contactNo) {
     return res.send({
       success: false,
-      message: "Please Enter your Number Properly",
+      message: "Please Enter your Details Properly",
     });
   }
 
@@ -156,7 +156,10 @@ const verifyOtp = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, password, confirmpassword } = req.body;
   if (!password || !confirmpassword) {
-    res.send({ success: false, message: "Please Enter Password Properly" });
+    res.send({
+      success: false,
+      message: "Please Enter Password or ConfirmPassword Properly",
+    });
   } else {
     if (password != confirmpassword) {
       res.send({
@@ -222,7 +225,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           if (err) {
             return res.send({
               success: false,
-              message: "Error saving image to Server",
+              message: "SomeThing Went Wrong",
             });
           }
         });
@@ -233,7 +236,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       if (err) {
         return res.send({
           success: false,
-          message: "Error saving image to Server",
+          message: "SomeThing Went Wrong",
         });
       }
     });
@@ -265,7 +268,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
   if (!contactNo) {
-    return res.send({ success: false, message: "Getting Error In Profile" });
+    return res.send({ success: false, message: "Invalid Profile" });
   } else {
     const profile = await User.findOne({ ContactNo: contactNo });
     res.send({ success: true, userProfile: profile });
@@ -293,7 +296,7 @@ const raiseQuery = asyncHandler(async (req, res) => {
   if (!description || !webSiteId || !userId) {
     return res.send({
       success: false,
-      message: "Please Enter Appropriate Data",
+      message: "Please Enter All Details",
     });
   } else {
     const isRaised = await Query.create({
