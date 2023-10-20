@@ -742,10 +742,6 @@
     }
   </style>
 
-  <script>
-    var primaryColor = "#fff"; // passing color from android
-    document.documentElement.style.setProperty("--primary-color", primaryColor);
-  </script>
   <body>
     <!---- Navigation ------>
     <header>
@@ -1366,19 +1362,7 @@
       }
 
       var params = getQueryParameters();
-      var primaryColor = params.primaryColor;
-      var primaryVariantColor = params.primaryVariantColor;
-      var secondaryColor = params.secondaryColor;
-      var secondaryVariantColor = params.secondaryVariantColor;
-      var font = params.fontFamily;
-      var textColor = params.textColor;
       var ipaddress = params.ipaddress;
-
-      var primaryColor = "#fff"; // passing color from android
-      document.documentElement.style.setProperty(
-        "--primary-color",
-        primaryColor
-      );
 
       function onImageTap(imgId) {
         AndroidInterface.onImageTap(imgId);
