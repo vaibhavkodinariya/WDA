@@ -187,9 +187,9 @@ const uploadTemplateDetails = asyncHandler(async (req, res) => {
     templatePath: `/wda/templates/${htmlName}`,
     imageName: name,
   });
-  if (templateInsert)
+  if (templateInsert) {
     return res.status(200).send({ message: "Files uploaded successfully" });
-
+  }
   return res.status(400).send({ message: "Website Not Updated" });
 });
 module.exports = {

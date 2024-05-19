@@ -11,57 +11,51 @@ const Website = require("../models/websiteModel");
 const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
   if (!contactNo) {
-    return res.send({ success: false, message: "Invalid User" });
-  } else {
-    const condition = {
-      ContactNo: contactNo,
-    };
-    const result = await User.aggregate([
-      {
-        $match: condition,
-      },
-      {
-        $lookup: {
-          from: "websites",
-          localField: "_id", // Field in the "User" collection
-          foreignField: "userId", // Field in the "website" collection
-          as: "websites",
-        },
-      },
-    ]);
-
-    const statusDetails = [];
-    for (data of result[0]["websites"]) {
-      var promise = await new Promise((resolve) => {
-        const status = Status.find({ webSiteId: data["_id"].toString() });
-        resolve(status);
-      });
-      statusDetails.push(promise[0]);
-    }
-    const mergedData = statusDetails.map((status) => {
-      const matchingWebsite = result[0]["websites"].find((website) =>
-        website._id.equals(status.webSiteId)
-      );
-      if (matchingWebsite) {
-        return {
-          statusName: status["statusName"],
-          webSiteId: status["webSiteId"].toString(),
-          websiteName: matchingWebsite.websiteName,
-          domainName: matchingWebsite.domainName,
-          type: matchingWebsite.websiteType,
-        };
-      } else {
-        return status;
-      }
-    });
-    res.send({
-      success: true,
-      id: result[0]["_id"],
-      Name: result[0]["Name"],
-      ContactNo: result[0]["ContactNo"],
-      statusData: mergedData,
-    });
+    return res.status(400).send({ message: "Invalid User" });
   }
+  const result = await User.aggregate([
+    {
+      $match: { ContactNo: contactNo },
+    },
+    {
+      $lookup: {
+        from: "websites",
+        localField: "_id", // Field in the "User" collection
+        foreignField: "userId", // Field in the "website" collection
+        as: "websites",
+      },
+    },
+  ]);
+
+  const statusDetails = [];
+  for (data of result[0]["websites"]) {
+    var promise = await new Promise((resolve) => {
+      const status = Status.find({ webSiteId: data["_id"].toString() });
+      resolve(status);
+    });
+    statusDetails.push(promise[0]);
+  }
+  const mergedData = statusDetails.map((status) => {
+    const matchingWebsite = result[0]["websites"].find((website) =>
+      website._id.equals(status.webSiteId)
+    );
+    if (matchingWebsite) {
+      return {
+        statusName: status["statusName"],
+        webSiteId: status["webSiteId"].toString(),
+        websiteName: matchingWebsite.websiteName,
+        domainName: matchingWebsite.domainName,
+        type: matchingWebsite.websiteType,
+      };
+    }
+    return status;
+  });
+  res.status(200).send({
+    id: result[0]["_id"],
+    Name: result[0]["Name"],
+    ContactNo: result[0]["ContactNo"],
+    statusData: mergedData,
+  });
 });
 
 //@desc Get Queries By Number
@@ -69,15 +63,11 @@ const getWebSiteStatusByNumber = asyncHandler(async (req, res) => {
 //access Private
 const getQueriesBySearch = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
-  if (!contactNo) {
-    return res.send({ success: false, message: "Invalid User" });
-  } else {
-    const condition = {
-      ContactNo: contactNo,
-    };
+  if (!contactNo) return res.status(400).send({ message: "Invalid User" });
+  try {
     const result = await User.aggregate([
       {
-        $match: condition,
+        $match: { ContactNo: contactNo },
       },
       {
         $lookup: {
@@ -88,32 +78,27 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
         },
       },
     ]);
-    try {
-      var queriesList = [];
-      for (var queries of result[0]["queries"]) {
-        const webSiteId = queries["webSiteId"].toString();
-        const queriesDetails = await Website.find({
-          _id: webSiteId,
-        });
-        // console.log(queriesDetails);
-        const queryStructure = {
-          description: queries["description"],
-          webId: webSiteId,
-          webName: queriesDetails[0]["websiteName"],
-          date: queries["date"],
-        };
-        queriesList.push(queryStructure);
-      }
-      // console.log(queriesDetails);
-      res.send({
-        success: true,
-        Name: result[0]["Name"],
-        ContactNo: result[0]["ContactNo"],
-        queries: queriesList,
+    var queriesList = [];
+    for (var queries of result[0]["queries"]) {
+      const webSiteId = queries["webSiteId"].toString();
+      const queriesDetails = await Website.find({
+        _id: webSiteId,
       });
-    } catch (e) {
-      res.send({ success: false, message: "No Data Found" });
+      const queryStructure = {
+        description: queries["description"],
+        webId: webSiteId,
+        webName: queriesDetails[0]["websiteName"],
+        date: queries["date"],
+      };
+      queriesList.push(queryStructure);
     }
+    return res.status(200).send({
+      Name: result[0]["Name"],
+      ContactNo: result[0]["ContactNo"],
+      queries: queriesList,
+    });
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
   }
 });
 
@@ -122,11 +107,12 @@ const getQueriesBySearch = asyncHandler(async (req, res) => {
 //access Private
 const getDetailsBySearch = asyncHandler(async (req, res) => {
   const { contactNo } = req.params;
-  if (!contactNo) {
-    return res.send({ success: false, message: "Invalid User" });
-  } else {
+  try {
+    if (!contactNo) return res.status(400).send({ message: "Invalid User" });
     const result = await User.findOne({ ContactNo: contactNo });
-    res.send({ success: true, details: result });
+    res.status(200).send({ details: result });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 });
 
@@ -134,30 +120,32 @@ const getDetailsBySearch = asyncHandler(async (req, res) => {
 //@Route /wda/admin/getAllQueries
 //access Private
 const getAllQueries = asyncHandler(async (req, res) => {
-  // const result = await Query.find();
-  const result = await User.aggregate([
-    {
-      $lookup: {
-        from: "queries",
-        localField: "_id", // Field in the "User" collection
-        foreignField: "userId", // Field in the "Query" collection
-        as: "queries",
+  try {
+    const result = await User.aggregate([
+      {
+        $lookup: {
+          from: "queries",
+          localField: "_id", // Field in the "User" collection
+          foreignField: "userId", // Field in the "Query" collection
+          as: "queries",
+        },
       },
-    },
-  ]);
-  const infodetails = [];
-  for (var details of result) {
-    if (details["queries"].length > 0) {
-      var queriesDetails = {
-        id: details["_id"],
-        name: details["Name"],
-        contactNo: details["ContactNo"],
-      };
-      infodetails.push(queriesDetails);
+    ]);
+    const infodetails = [];
+    for (var details of result) {
+      if (details["queries"].length > 0) {
+        var queriesDetails = {
+          id: details["_id"],
+          name: details["Name"],
+          contactNo: details["ContactNo"],
+        };
+        infodetails.push(queriesDetails);
+      }
     }
+    res.status(200).send({ info: infodetails });
+  } catch (error) {
+    res.status(400).send({ info: error.message });
   }
-
-  res.send({ success: true, info: infodetails });
 });
 
 //@desc Update WebSite Status
@@ -165,18 +153,17 @@ const getAllQueries = asyncHandler(async (req, res) => {
 //access Private
 const updateWebSiteStatus = asyncHandler(async (req, res) => {
   const { webSiteId, status } = req.body;
-  console.log(req.body);
-  const updateBywebSiteId = { webSiteId: webSiteId };
   const update = {
     $set: {
       statusName: status,
     },
   };
-  const result = await Status.updateOne(updateBywebSiteId, update);
-  if (result) {
-    return res.send({ success: true, message: "Status Changed" });
-  } else {
-    return res.send({ success: false, message: "SomeThing Went Wrong" });
+  try {
+    const result = await Status.updateOne({ webSiteId: webSiteId }, update);
+    if (result) return res.status(200).send({ message: "Status Changed" });
+    return res.status(200).send({ message: "Status Not Changed" });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 });
 
@@ -228,7 +215,6 @@ const getAllStatus = asyncHandler(async (req, res) => {
   }
 
   const combinedArray = [];
-
   // Create a mapping of userId to objects in array1 for efficient lookup
   const userIdToData1Mapping = {};
   userDetails.forEach((item1) => {
@@ -259,8 +245,7 @@ const getAllStatus = asyncHandler(async (req, res) => {
 
   combinedArray.push(...Object.values(userIdToData1Mapping));
 
-  res.send({
-    success: true,
+  res.status(200).send({
     allStatusDetails: combinedArray,
   });
 });
@@ -270,7 +255,7 @@ const getAllStatus = asyncHandler(async (req, res) => {
 //access Private
 const getAllTemplates = asyncHandler(async (req, res) => {
   const templates = await Template.find();
-  res.json({ success: true, templates });
+  res.status(200).send({ templates });
 });
 
 module.exports = {
